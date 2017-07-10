@@ -1,31 +1,31 @@
 ﻿using System;
-using CitySimulator;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace window {
+namespace CitySimulator {
     static class Program {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         static void Main() {
             // Request a 24-bits depth buffer when creating the window
-            ContextSettings contextSettings = new ContextSettings();
-            contextSettings.DepthBits = 24;
+            var contextSettings = new ContextSettings {
+                DepthBits = 24
+            };
 
             // Create the main window
-            RenderWindow window = new RenderWindow(new VideoMode(640, 480), "City Simulator", Styles.Default, contextSettings);
+            var window = new RenderWindow(new VideoMode(640, 480), "City Simulator", Styles.Default, contextSettings);
 
             // Make it the active window for OpenGL calls
             window.SetActive();
 
             // Setup event handlers
-            window.Closed += new EventHandler(OnClosed);
-            window.KeyPressed += new EventHandler<KeyEventArgs>(OnKeyPressed);
-            window.Resized += new EventHandler<SizeEventArgs>(OnResized);
+            window.Closed += OnClosed;
+            window.KeyPressed += OnKeyPressed;
+            window.Resized += OnResized;
 
-            City city = new City(32,32);
-            SfmlCityRenderer renderer = new SfmlCityRenderer(city);
+            var city = new City(256,256);
+            var renderer = new SfmlCityRenderer(city);
 
 
             // Start the game loop
@@ -44,7 +44,7 @@ namespace window {
         /// Function called when the window is closed
         /// </summary>
         static void OnClosed(object sender, EventArgs e) {
-            Window window = (Window)sender;
+            var window = (RenderWindow)sender;
             window.Close();
         }
 
@@ -52,16 +52,34 @@ namespace window {
         /// Function called when a key is pressed
         /// </summary>
         static void OnKeyPressed(object sender, KeyEventArgs e) {
-            Window window = (Window)sender;
-            if (e.Code == Keyboard.Key.Escape)
-                window.Close();
+            var window = (RenderWindow)sender;
+            switch (e.Code) {
+                case Keyboard.Key.Escape:
+                    window.Close();
+                    break;
+                case Keyboard.Key.PageDown:
+                    Zoom(window, 0.5f);
+                    break;
+                case Keyboard.Key.PageUp:
+                    Zoom(window, 2.0f);
+                    break;
+            }   
+        }
+
+        private static void Zoom(RenderWindow window, float f) {
+            var view = window.GetView();
+            view.Zoom(f);
+            window.SetView(view);
         }
 
         /// <summary>
         /// Function called when the window is resized
         /// </summary>
         static void OnResized(object sender, SizeEventArgs e) {
-            //GL.Viewport(0, 0, (int)e.Width, (int)e.Height);
+            var window = (RenderWindow)sender;
+            var view = window.GetView();
+            view.Size = window.Size.ToVector2F();
+            window.SetView(view);
         }
     }
 }

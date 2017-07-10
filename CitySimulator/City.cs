@@ -25,7 +25,7 @@ namespace CitySimulator {
             BuildingType residential = new BuildingType();
             Random rnd = new Random();
 
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 25; i++) {
                 PlaceBuilding(residential, new Vector2i(rnd.Next(Width - 1), rnd.Next(Height - 1)));
             }
 

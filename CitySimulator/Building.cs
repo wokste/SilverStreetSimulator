@@ -1,6 +1,4 @@
-﻿using System;
-using SFML.Graphics;
-using SFML.Window;
+﻿using SFML.Window;
 
 namespace CitySimulator {
     internal class Building {
