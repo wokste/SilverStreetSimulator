@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using SFML.Graphics;
 using SFML.Window;
 
 namespace CitySimulator {
@@ -6,7 +8,7 @@ namespace CitySimulator {
         private readonly Random _rnd = new Random();
 
         internal CityMap GenerateCity() {
-            var cityMap = new CityMap(256, 256);
+            var cityMap = new CityMap(128, 128);
 
             GenerateTerrain(cityMap);
             CreateVillage(cityMap);
@@ -18,12 +20,12 @@ namespace CitySimulator {
         private void GenerateTerrain(CityMap cityMap) {
             var heightMap = new PerlinNoise {
                 Seed = _rnd.Next(),
-                Scale = 42
+                Scale = 16
             };
 
             var vegitationMap = new PerlinNoise {
                 Seed = _rnd.Next(),
-                Scale = 8
+                Scale = 3
             };
 
             for (var x = 0; x < cityMap.Width; x++) {
@@ -32,23 +34,40 @@ namespace CitySimulator {
                     var vegitation = vegitationMap.Get(x, y);
 
                     if (height < -0.5f) {
-                        cityMap.Terrain[x, y] = 3;
-                    } else if (vegitation < -0.25f) {
                         cityMap.Terrain[x, y] = 2;
-                    } else if (vegitation > 0.75f) {
-                        cityMap.Terrain[x, y] = 4;
-                    } else {
+                    } else if (vegitation < -0.5f) {
                         cityMap.Terrain[x, y] = 1;
+                    } else if (vegitation > 0.5f) {
+                        cityMap.Terrain[x, y] = 3;
+                    } else {
+                        cityMap.Terrain[x, y] = 0;
                     }
                 }
             }
         }
 
         private void CreateVillage(CityMap cityMap) {
-            BuildingType residential = new BuildingType();
+            List<BuildingType> residential = new List<BuildingType>();
+
+            residential.Add(new BuildingType {
+                Size = new Vector2i(1,1),
+                TextureRect = new IntRect(0,0,64,64)
+            });
+            residential.Add(new BuildingType {
+                Size = new Vector2i(1, 1),
+                TextureRect = new IntRect(64, 0, 64, 64)
+            });
+            residential.Add(new BuildingType {
+                Size = new Vector2i(1, 1),
+                TextureRect = new IntRect(128, 0, 64, 64)
+            });
+            residential.Add(new BuildingType {
+                Size = new Vector2i(1, 1),
+                TextureRect = new IntRect(192, 0, 64, 64)
+            });
 
             for (int i = 0; i < 25; i++) {
-                cityMap.PlaceBuilding(residential, new Vector2i(_rnd.Next(cityMap.Width - 1), _rnd.Next(cityMap.Height - 1)));
+                cityMap.PlaceBuilding(residential[_rnd.Next(residential.Count)], new Vector2i(_rnd.Next(cityMap.Width - 1), _rnd.Next(cityMap.Height - 1)));
             }
         }
 

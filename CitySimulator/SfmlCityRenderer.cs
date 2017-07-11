@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Drawing;
 using SFML.Graphics;
 using SFML.Window;
+using Color = SFML.Graphics.Color;
+using Image = SFML.Graphics.Image;
 
 namespace CitySimulator {
     class SfmlCityRenderer : Drawable {
@@ -8,64 +11,88 @@ namespace CitySimulator {
 
         private int _tileSize = 32;
 
+        private Texture tileSet;
+        private Sprite tileSetSprite;
+        private Texture buildings;
+        private Sprite buildingSprite;
+
         public SfmlCityRenderer(CityMap cityMap) {
             _cityMap = cityMap;
+            Image image = new Image(@"D:\AppData\Local\CitySimulator\Assets\TilesetIso.png");
+            tileSet = new Texture(image);
+            tileSetSprite = new Sprite {
+                Texture = tileSet
+            };
+
+            image = new Image(@"D:\AppData\Local\CitySimulator\Assets\Buildings1x1.png");
+            buildings = new Texture(image);
+            buildingSprite = new Sprite {
+                Texture = buildings
+            };
         }
 
         public void Draw(RenderTarget target, RenderStates states) {
             target.Clear();
 
-            DrawTerrain(target);
-            DrawBuildings(target);
+            DrawTerrainIso(target);
+            DrawBuildingsIso(target);
         }
 
-        private void DrawTerrain(RenderTarget target) {
-            var shape = new RectangleShape {
-                Size = new Vector2f(1, 1) * _tileSize,
-            };
+        private void DrawTerrainIso(RenderTarget target) {
+            var x0 = 0;
+            var x1 = _cityMap.Width;
 
-            var view = target.GetView();
-
-            var x0 = (int)Math.Floor(Math.Max(0, (view.Center.X - view.Size.X / 2) / _tileSize));
-            var x1 = (int)Math.Ceiling(Math.Min(_cityMap.Width, (view.Center.X + view.Size.X / 2) / _tileSize));
-            
-            var y0 = (int)Math.Floor(Math.Max(0, (view.Center.Y - view.Size.Y / 2) / _tileSize));
-            var y1 = (int)Math.Ceiling(Math.Min(_cityMap.Width, (view.Center.Y + view.Size.Y / 2) / _tileSize));
+            var y0 = 0;
+            var y1 = _cityMap.Height;
 
             for (var x = x0; x < x1; x++) {
                 for (var y = y0; y < y1; y++) {
-                    shape.Position = new Vector2f(x, y) * _tileSize;
+                    var vec2D = new Vector2f(x, y);
+                    var vecIso = ToIso(vec2D);
+                    vecIso.X *= 32;
+                    vecIso.Y *= 16;
 
-                    switch (_cityMap.Terrain[x, y]) {
-                        case 1:
-                            shape.FillColor = new Color(128, 255, 0);
-                            break;
-                        case 2:
-                            shape.FillColor = new Color(255, 255, 128);
-                            break;
-                        case 3:
-                            shape.FillColor = new Color(0, 128, 255);
-                            break;
-                        case 4:
-                            shape.FillColor = new Color(64, 128, 0);
-                            break;
-                    }
-                    
-                    target.Draw(shape);
+                    tileSetSprite.Position = vecIso;
+
+                    var tileId = _cityMap.Terrain[x, y];
+                    tileSetSprite.TextureRect = new IntRect((tileId % 2) * 64, (tileId / 2) * 32, 64, 32);
+
+                    target.Draw(tileSetSprite);
                 }
             }
         }
 
-        private void DrawBuildings(RenderTarget target) {
+        Vector2f To2D(Vector2f vecIso) {
+            var vec2D = new Vector2f {
+                X = (vecIso.Y + vecIso.X) / 2,
+                Y = (vecIso.Y - vecIso.X) / 2
+            };
+            return vec2D;
+        }
+
+        Vector2f ToIso(Vector2f vec2D) {
+            var vecIso = new Vector2f { 
+                X = vec2D.X - vec2D.Y,
+                Y = vec2D.X + vec2D.Y
+            };
+            return vecIso;
+        }
+
+        private void DrawBuildingsIso(RenderTarget target) {
             foreach (var building in _cityMap.Buildings) {
+                var vec2D = building.Position.ToVector2F();
+                var vecIso = ToIso(vec2D);
+                vecIso.X *= 32;
+                vecIso.Y *= 16;
 
-                var shape = new RectangleShape {
-                    Position = building.Position.ToVector2F() * _tileSize,
-                    Size = building.Type.Size.ToVector2F() * _tileSize,
-                    FillColor = new Color(255, 0, 0)
-                };
+                vecIso.Y -= building.Type.Height; // Adjust for building height
 
-                target.Draw(shape);
+                buildingSprite.Position = vecIso;
+
+                buildingSprite.TextureRect = building.Type.TextureRect;
+
+
+                target.Draw(buildingSprite);
             }
         }
     }
