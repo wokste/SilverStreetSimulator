@@ -9,25 +9,21 @@ namespace CitySimulator {
     class SfmlCityRenderer : Drawable {
         private readonly CityMap _cityMap;
 
-        private int _tileSize = 32;
-
-        private Texture tileSet;
-        private Sprite tileSetSprite;
-        private Texture buildings;
-        private Sprite buildingSprite;
+        private readonly Sprite _tileSetSprite;
+        private readonly Sprite _buildingSprite;
 
         public SfmlCityRenderer(CityMap cityMap) {
             _cityMap = cityMap;
-            Image image = new Image(@"D:\AppData\Local\CitySimulator\Assets\TilesetIso.png");
-            tileSet = new Texture(image);
-            tileSetSprite = new Sprite {
-                Texture = tileSet
-            };
+            
+            _tileSetSprite = MakeSprite("TilesetIso.png");
+            _buildingSprite = MakeSprite("buildings1x1.png");
+        }
 
-            image = new Image(@"D:\AppData\Local\CitySimulator\Assets\Buildings1x1.png");
-            buildings = new Texture(image);
-            buildingSprite = new Sprite {
-                Texture = buildings
+        private Sprite MakeSprite(string texName) {
+            var image = new Image($"D:\\AppData\\Local\\CitySimulator\\Assets\\{texName}");
+            var texture = new Texture(image);
+            return new Sprite {
+                Texture = texture
             };
         }
 
@@ -52,12 +48,12 @@ namespace CitySimulator {
                     vecIso.X *= 32;
                     vecIso.Y *= 16;
 
-                    tileSetSprite.Position = vecIso;
+                    _tileSetSprite.Position = vecIso;
 
                     var tileId = _cityMap.Terrain[x, y];
-                    tileSetSprite.TextureRect = new IntRect((tileId % 2) * 64, (tileId / 2) * 32, 64, 32);
+                    _tileSetSprite.TextureRect = new IntRect((tileId % 2) * 64, (tileId / 2) * 32, 64, 32);
 
-                    target.Draw(tileSetSprite);
+                    target.Draw(_tileSetSprite);
                 }
             }
         }
@@ -87,12 +83,12 @@ namespace CitySimulator {
 
                 vecIso.Y -= building.Type.Height; // Adjust for building height
 
-                buildingSprite.Position = vecIso;
+                _buildingSprite.Position = vecIso;
 
-                buildingSprite.TextureRect = building.Type.TextureRect;
+                _buildingSprite.TextureRect = building.Type.TextureRect;
 
 
-                target.Draw(buildingSprite);
+                target.Draw(_buildingSprite);
             }
         }
     }
