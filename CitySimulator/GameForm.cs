@@ -63,12 +63,30 @@ namespace CitySimulator {
                 case Keyboard.Key.PageUp:
                     Zoom(2.0f);
                     break;
+                case Keyboard.Key.Up:
+                    Pan(0,-1);
+                    break;
+                case Keyboard.Key.Down:
+                    Pan(0, 1);
+                    break;
+                case Keyboard.Key.Left:
+                    Pan(-1, 0);
+                    break;
+                case Keyboard.Key.Right:
+                    Pan(1, 0);
+                    break;
             }
         }
 
         private void Zoom(float f) {
             var view = _window.GetView();
             view.Zoom(f);
+            _window.SetView(view);
+        }
+
+        private void Pan(float x, float y) {
+            var view = _window.GetView();
+            view.Move(new Vector2f(x,y) * 16);
             _window.SetView(view);
         }
 
