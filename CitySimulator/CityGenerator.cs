@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SFML.Window;
 
 namespace CitySimulator {
     class CityGenerator {
-        private Random _rnd = new Random();
+        private readonly Random _rnd = new Random();
 
         internal CityMap GenerateCity() {
             var cityMap = new CityMap(256, 256);
