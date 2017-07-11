@@ -16,9 +16,30 @@ namespace CitySimulator {
 
 
         private void GenerateTerrain(CityMap cityMap) {
+            var heightMap = new PerlinNoise {
+                Seed = _rnd.Next(),
+                Scale = 42
+            };
+
+            var vegitationMap = new PerlinNoise {
+                Seed = _rnd.Next(),
+                Scale = 8
+            };
+
             for (var x = 0; x < cityMap.Width; x++) {
                 for (var y = 0; y < cityMap.Height; y++) {
-                    cityMap.Terrain[x, y] = _rnd.Next(1, 5);
+                    var height = heightMap.Get(x, y);
+                    var vegitation = vegitationMap.Get(x, y);
+
+                    if (height < -0.5f) {
+                        cityMap.Terrain[x, y] = 3;
+                    } else if (vegitation < -0.25f) {
+                        cityMap.Terrain[x, y] = 2;
+                    } else if (vegitation > 0.75f) {
+                        cityMap.Terrain[x, y] = 4;
+                    } else {
+                        cityMap.Terrain[x, y] = 1;
+                    }
                 }
             }
         }
