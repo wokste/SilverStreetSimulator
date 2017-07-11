@@ -14,7 +14,7 @@ namespace CitySimulator {
             };
 
             // Create the main window
-            var window = new RenderWindow(new VideoMode(640, 480), "City Simulator", Styles.Default, contextSettings);
+            var window = new RenderWindow(new VideoMode(640, 480), "CityMap Simulator", Styles.Default, contextSettings);
 
             // Make it the active window for OpenGL calls
             window.SetActive();
@@ -24,7 +24,7 @@ namespace CitySimulator {
             window.KeyPressed += OnKeyPressed;
             window.Resized += OnResized;
 
-            var city = new City(256,256);
+            var city = new CityGenerator().GenerateCity();
             var renderer = new SfmlCityRenderer(city);
 
 

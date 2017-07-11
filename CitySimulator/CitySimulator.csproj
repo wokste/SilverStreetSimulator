@@ -82,7 +82,8 @@
   <ItemGroup>
     <Compile Include="Building.cs" />
     <Compile Include="BuildingType.cs" />
-    <Compile Include="City.cs" />
+    <Compile Include="CityMap.cs" />
+    <Compile Include="CityGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SfmlCityRenderer.cs" />
