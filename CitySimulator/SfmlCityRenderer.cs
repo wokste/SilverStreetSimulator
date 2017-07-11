@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using System;
+using SFML.Graphics;
 using SFML.Window;
 
 namespace CitySimulator {
@@ -23,8 +24,16 @@ namespace CitySimulator {
                 Size = new Vector2f(1, 1) * _tileSize,
             };
 
-            for (var x = 0; x < _cityMap.Width; x++) {
-                for (var y = 0; y < _cityMap.Height; y++) {
+            var view = target.GetView();
+
+            var x0 = (int)Math.Floor(Math.Max(0, (view.Center.X - view.Size.X / 2) / _tileSize));
+            var x1 = (int)Math.Ceiling(Math.Min(_cityMap.Width, (view.Center.X + view.Size.X / 2) / _tileSize));
+            
+            var y0 = (int)Math.Floor(Math.Max(0, (view.Center.Y - view.Size.Y / 2) / _tileSize));
+            var y1 = (int)Math.Ceiling(Math.Min(_cityMap.Width, (view.Center.Y + view.Size.Y / 2) / _tileSize));
+
+            for (var x = x0; x < x1; x++) {
+                for (var y = y0; y < y1; y++) {
                     shape.Position = new Vector2f(x, y) * _tileSize;
 
                     switch (_cityMap.Terrain[x, y]) {
@@ -41,9 +50,7 @@ namespace CitySimulator {
                             shape.FillColor = new Color(64, 128, 0);
                             break;
                     }
-
                     
-
                     target.Draw(shape);
                 }
             }
