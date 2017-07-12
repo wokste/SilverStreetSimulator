@@ -34,13 +34,13 @@ namespace CitySimulator {
                     var vegitation = vegitationMap.Get(x, y);
 
                     if (height < -0.5f) {
-                        cityMap.Terrain[x, y] = 2;
+                        cityMap.Terrain[x, y].Terrain = 2;
                     } else if (vegitation < -0.5f) {
-                        cityMap.Terrain[x, y] = 1;
+                        cityMap.Terrain[x, y].Terrain = 1;
                     } else if (vegitation > 0.5f) {
-                        cityMap.Terrain[x, y] = 3;
+                        cityMap.Terrain[x, y].Terrain = 3;
                     } else {
-                        cityMap.Terrain[x, y] = 0;
+                        cityMap.Terrain[x, y].Terrain = 0;
                     }
                 }
             }
@@ -92,7 +92,7 @@ namespace CitySimulator {
                         var buildingType = Math.Abs(dx) < _rnd.Next(3, 5)
                             ? resLarge[_rnd.Next(resLarge.Count)]
                             : resSmall[_rnd.Next(resSmall.Count)];
-                        cityMap.PlaceBuilding(buildingType, new Vector2i(x + dx, y + dy));
+                        cityMap.PlaceBuilding(new Vector2i(x + dx, y + dy), buildingType);
                     }
                 }
             }

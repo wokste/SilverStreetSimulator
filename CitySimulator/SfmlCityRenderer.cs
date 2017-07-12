@@ -52,7 +52,7 @@ namespace CitySimulator {
 
                     _tileSetSprite.Position = vecIso;
 
-                    var tileId = _cityMap.Terrain[x, y];
+                    var tileId = _cityMap.Terrain[x, y].Terrain;
                     _tileSetSprite.TextureRect = new IntRect((tileId % 2) * 64, (tileId / 2) * 32, 64, 32);
 
                     target.Draw(_tileSetSprite);
@@ -77,21 +77,33 @@ namespace CitySimulator {
         }
 
         private void DrawBuildingsIso(RenderTarget target) {
-            foreach (var building in _cityMap.Buildings) {
-                var vec2D = building.Position.ToVector2F();
-                var vecIso = ToIso(vec2D);
-                vecIso.X *= 32;
-                vecIso.Y *= 16;
+            var x0 = 0;
+            var x1 = _cityMap.Width;
 
-                vecIso.X -= (int)(building.Type.TextureRect.Width / 2);
-                vecIso.Y -= building.Type.Height; // Adjust for building height
+            var y0 = 0;
+            var y1 = _cityMap.Height;
 
-                _buildingSprite.Position = vecIso;
+            for (var x = x0; x < x1; x++) {
+                for (var y = y0; y < y1; y++) {
+                    var building = _cityMap.Terrain[x, y].Building;
 
-                _buildingSprite.TextureRect = building.Type.TextureRect;
+                    if (building == null)
+                        continue;
 
+                    var vec2D = new Vector2f(x,y);
+                    var vecIso = ToIso(vec2D);
+                    vecIso.X *= 32;
+                    vecIso.Y *= 16;
 
-                target.Draw(_buildingSprite);
+                    vecIso.X -= (int)(building.Type.TextureRect.Width / 2);
+                    vecIso.Y -= building.Type.Height; // Adjust for building height
+
+                    _buildingSprite.Position = vecIso;
+
+                    _buildingSprite.TextureRect = building.Type.TextureRect;
+                    
+                    target.Draw(_buildingSprite);
+                }
             }
         }
     }
