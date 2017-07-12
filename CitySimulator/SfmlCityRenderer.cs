@@ -48,6 +48,8 @@ namespace CitySimulator {
                     vecIso.X *= 32;
                     vecIso.Y *= 16;
 
+                    vecIso.X -= 32;
+
                     _tileSetSprite.Position = vecIso;
 
                     var tileId = _cityMap.Terrain[x, y];
@@ -81,6 +83,7 @@ namespace CitySimulator {
                 vecIso.X *= 32;
                 vecIso.Y *= 16;
 
+                vecIso.X -= (int)(building.Type.TextureRect.Width / 2);
                 vecIso.Y -= building.Type.Height; // Adjust for building height
 
                 _buildingSprite.Position = vecIso;
