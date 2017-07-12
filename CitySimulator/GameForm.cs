@@ -7,6 +7,7 @@ namespace CitySimulator {
         private readonly RenderWindow _window;
         private readonly CityMap _city;
         private readonly SfmlCityRenderer _renderer;
+        private Vector2f _mousePos;
 
         internal GameForm() {
             // Request a 24-bits depth buffer when creating the window
@@ -22,8 +23,11 @@ namespace CitySimulator {
 
             // Setup event handlers
             _window.Closed += OnClosed;
-            _window.KeyPressed += OnKeyPressed;
             _window.Resized += OnResized;
+
+            _window.MouseWheelMoved += OnMouseWheelMoved;
+            _window.MouseMoved += OnMouseMoved;
+            
 
             _city = new CityGenerator().GenerateCity();
             _renderer = new SfmlCityRenderer(_city);
@@ -41,6 +45,25 @@ namespace CitySimulator {
                 _window.Display();
             }
         }
+        
+        private void OnMouseMoved(object sender, MouseMoveEventArgs e) {
+            var mouseDrag = _mousePos - new Vector2f(e.X, e.Y);
+            _mousePos = new Vector2f(e.X, e.Y);
+
+            if (Mouse.IsButtonPressed(Mouse.Button.Right)) {
+                var view = _window.GetView();
+                view.Move(mouseDrag);
+                _window.SetView(view);
+            }
+        }
+
+        private void OnMouseWheelMoved(object sender, MouseWheelEventArgs e) {
+            if (e.Delta > 0) {
+                Zoom(0.5f);
+            } else {
+                Zoom(2f);
+            }
+        }
 
         /// <summary>
         /// Function called when the window is closed
@@ -49,44 +72,9 @@ namespace CitySimulator {
             _window.Close();
         }
 
-        /// <summary>
-        /// Function called when a key is pressed
-        /// </summary>
-        private void OnKeyPressed(object sender, KeyEventArgs e) {
-            switch (e.Code) {
-                case Keyboard.Key.Escape:
-                    _window.Close();
-                    break;
-                case Keyboard.Key.PageDown:
-                    Zoom(0.5f);
-                    break;
-                case Keyboard.Key.PageUp:
-                    Zoom(2.0f);
-                    break;
-                case Keyboard.Key.Up:
-                    Pan(0,-1);
-                    break;
-                case Keyboard.Key.Down:
-                    Pan(0, 1);
-                    break;
-                case Keyboard.Key.Left:
-                    Pan(-1, 0);
-                    break;
-                case Keyboard.Key.Right:
-                    Pan(1, 0);
-                    break;
-            }
-        }
-
         private void Zoom(float f) {
             var view = _window.GetView();
             view.Zoom(f);
-            _window.SetView(view);
-        }
-
-        private void Pan(float x, float y) {
-            var view = _window.GetView();
-            view.Move(new Vector2f(x,y) * 16);
             _window.SetView(view);
         }
 

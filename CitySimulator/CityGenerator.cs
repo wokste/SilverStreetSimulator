@@ -83,13 +83,17 @@ namespace CitySimulator {
                 TextureRect = new IntRect(0, 128, 128, 128)
             });
 
-            var x = _rnd.Next(cityMap.Width - 1);
-            var y = _rnd.Next(cityMap.Height - 1);
 
-            for (var dx = -8; dx <= 8; dx++) {
-                for (var dy = -1; dy <= 1; dy += 2) {
-                    var buildingType = Math.Abs(dx) < _rnd.Next(3, 5) ? resLarge[_rnd.Next(resLarge.Count)] : resSmall[_rnd.Next(resSmall.Count)];
-                    cityMap.PlaceBuilding(buildingType, new Vector2i(x + dx, y + dy));
+            for (int i = 0; i < 20; i++) {
+                var x = _rnd.Next(cityMap.Width - 1);
+                var y = _rnd.Next(cityMap.Height - 1);
+                for (var dx = -8; dx <= 8; dx++) {
+                    for (var dy = -1; dy <= 1; dy += 2) {
+                        var buildingType = Math.Abs(dx) < _rnd.Next(3, 5)
+                            ? resLarge[_rnd.Next(resLarge.Count)]
+                            : resSmall[_rnd.Next(resSmall.Count)];
+                        cityMap.PlaceBuilding(buildingType, new Vector2i(x + dx, y + dy));
+                    }
                 }
             }
         }
