@@ -16,7 +16,7 @@ namespace CitySimulator {
             };
 
             // Create the main window
-            _window = new RenderWindow(new VideoMode(640, 480), "CityMap Simulator", Styles.Default, contextSettings);
+            _window = new RenderWindow(new VideoMode(640, 480), "Silver Street Simulator", Styles.Default, contextSettings);
 
             // Make it the active window for OpenGL calls
             _window.SetActive();
