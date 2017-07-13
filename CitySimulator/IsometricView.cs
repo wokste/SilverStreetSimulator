@@ -4,16 +4,15 @@ using SFML.Graphics;
 using SFML.Window;
 
 namespace CitySimulator {
-    class IsometricView {
+    public class IsometricView {
+        public const int TileWidth = 64;
+        public const int TileHeight = 32;
 
-        private const int TileWidth = 64;
-        private const int TileHeight = 32;
-
-        private const int HalfWidth = TileWidth / 2;
-        private const int HalfHeight = TileHeight / 2;
+        public const int HalfWidth = TileWidth / 2;
+        public const int HalfHeight = TileHeight / 2;
 
 
-        internal Vector2f CoordinatesToTile(Vector2f vecIso) {
+        public Vector2f CoordinatesToTile(Vector2f vecIso) {
             vecIso.X /= TileWidth;
             vecIso.Y /= TileHeight;
 
@@ -24,15 +23,15 @@ namespace CitySimulator {
             return vec2D;
         }
 
-        internal Vector2f TileToCoordinates(Vector2f vec2D) {
+        public Vector2f TileToCoordinates(Vector2f vec2D) {
             var vecIso = new Vector2f {
                 X = (vec2D.X - vec2D.Y) * HalfWidth,
                 Y = (vec2D.X + vec2D.Y) * HalfHeight
             };
             return vecIso;
         }
-        
-        internal Vector2f TileToCoordinates(Vector2f vecIso, IntRect textureRect) {
+
+        public Vector2f TileToCoordinates(Vector2f vecIso, IntRect textureRect) {
             var vec2D = TileToCoordinates(vecIso);
             vec2D.X -= (textureRect.Width - TileWidth) / 2;
             vec2D.Y -= (textureRect.Height - textureRect.Width / 2);
