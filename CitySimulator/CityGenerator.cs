@@ -9,7 +9,6 @@ namespace CitySimulator {
             var cityMap = new CityMap(128, 128);
 
             GenerateTerrain(cityMap);
-            CreateVillage(cityMap);
 
             return cityMap;
         }
@@ -39,24 +38,6 @@ namespace CitySimulator {
                         cityMap.Terrain[x, y].Terrain = 3;
                     } else {
                         cityMap.Terrain[x, y].Terrain = 0;
-                    }
-                }
-            }
-        }
-
-        private void CreateVillage(CityMap cityMap) {
-            ZoneManager zoneManager = new ZoneManager();
-            zoneManager.Load(@"D:\AppData\Local\CitySimulator\Assets\buildings.xml");
-
-            for (var i = 0; i < 25; i++) {
-                var x = _rnd.Next(cityMap.Width - 1);
-                var y = _rnd.Next(cityMap.Height - 1);
-
-                var zone = zoneManager[_rnd.Next(3)];
-
-                for (var dx = -4; dx <= 4; dx++) {
-                    for (var dy = -4; dy <= 4; dy ++) {
-                        cityMap.PlaceBuilding(new Vector2i(x + dx, y + dy), zone.GetRandom(_rnd));
                     }
                 }
             }

@@ -38,7 +38,7 @@ namespace CitySimulator {
             for (var x = area.Left; x < area.Left + area.Width; x++) {
                 for (var y = area.Top; y < area.Top + area.Height; y++) {
                     var vec2D = new Vector2f(x, y);
-                    var vecIso = _isometricView.TileToCoordinates(vec2D);
+                    var vecIso = _isometricView.WensToPx(vec2D);
 
                     _tileSetSprite.Position = vecIso;
 
@@ -62,7 +62,7 @@ namespace CitySimulator {
                         continue;
 
                     var vec2D = new Vector2f(x,y);
-                    var vecIso = _isometricView.TileToCoordinates(vec2D, building.Type.TextureRect);
+                    var vecIso = _isometricView.WensToPx(vec2D, building.Type.TextureRect);
 
                     _buildingSprite.Position = vecIso;
 

@@ -16,8 +16,8 @@ namespace CitySimulatorTests {
             var view = new IsometricView();
 
             var tile2D = new Vector2f(1, 3);
-            var tileIso = view.CoordinatesToTile(tile2D);
-            var tile2DCopy = view.TileToCoordinates(tileIso);
+            var tileIso = view.PxToWens(tile2D);
+            var tile2DCopy = view.WensToPx(tileIso);
 
             Assert.AreEqual(tile2D, tile2DCopy);
         }
@@ -30,9 +30,9 @@ namespace CitySimulatorTests {
             var view = new IsometricView();
 
             var tile2D = new Vector2f(1, 3);
-            var tileIsoBasic = view.TileToCoordinates(tile2D);
+            var tileIsoBasic = view.WensToPx(tile2D);
             var rect = new IntRect(234, 12, IsometricView.TileWidth, IsometricView.TileHeight);
-            var tileIsoAdvanced = view.TileToCoordinates(tile2D, rect);
+            var tileIsoAdvanced = view.WensToPx(tile2D, rect);
 
             Assert.AreEqual(tileIsoBasic, tileIsoAdvanced);
         }
@@ -57,13 +57,13 @@ namespace CitySimulatorTests {
             var tileIsoMin = new Vector2f(float.PositiveInfinity, float.PositiveInfinity);
             
             foreach(var corner in tile2DCorners) {
-                var tileIso = view.TileToCoordinates(corner);
+                var tileIso = view.WensToPx(corner);
                 tileIsoMin.X = Math.Min(tileIso.X, tileIsoMin.X);
                 tileIsoMin.Y = Math.Min(tileIso.Y, tileIsoMin.Y);
             }
 
             var rect = new IntRect(0, 0, IsometricView.TileWidth * size, IsometricView.TileHeight * size);
-            var tileIsoCalc = view.TileToCoordinates(tile2D, rect);
+            var tileIsoCalc = view.WensToPx(tile2D, rect);
 
             Assert.AreEqual(tileIsoMin, tileIsoCalc);
         }

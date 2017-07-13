@@ -15,7 +15,7 @@ namespace CitySimulator {
         }
 
         internal bool IsFreeArea(Vector2i pos, Vector2i size) {
-            if (pos.X < 0 || pos.Y < 0 || pos.X + size.X >= Width || pos.Y + size.Y >= Height) {
+            if (pos.X < 0 || pos.Y < 0 || pos.X + size.X > Width || pos.Y + size.Y > Height) {
                 return false;
             }
 

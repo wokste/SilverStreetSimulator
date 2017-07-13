@@ -11,32 +11,48 @@ namespace CitySimulator {
         public const int HalfWidth = TileWidth / 2;
         public const int HalfHeight = TileHeight / 2;
 
+        /// <summary>
+        /// Converts tile positions in pixels to world positions.
+        /// </summary>
+        /// <param name="vecPx">A vector in pixel coordinates on the texture. Zooming and padding shouldn't change this</param>
+        /// <returns>A vector in Wens coordinates. X represent distance in west-east direction. Y represents distance in north-south direction</returns>
+        public Vector2f PxToWens(Vector2f vecPx) {
+            vecPx.X /= TileWidth;
+            vecPx.Y /= TileHeight;
 
-        public Vector2f CoordinatesToTile(Vector2f vecIso) {
-            vecIso.X /= TileWidth;
-            vecIso.Y /= TileHeight;
-
-            var vec2D = new Vector2f {
-                X = (vecIso.Y + vecIso.X),
-                Y = (vecIso.Y - vecIso.X)
+            var vecWens = new Vector2f {
+                X = vecPx.Y + vecPx.X,
+                Y = vecPx.Y - vecPx.X
             };
-            return vec2D;
+            return vecWens;
         }
 
-        public Vector2f TileToCoordinates(Vector2f vec2D) {
-            var vecIso = new Vector2f {
-                X = (vec2D.X - vec2D.Y) * HalfWidth,
-                Y = (vec2D.X + vec2D.Y) * HalfHeight
+        /// <summary>
+        /// Converts tile positions in world positions to pixels.
+        /// </summary>
+        /// <param name="vecWens">A vector in Wens coordinates. X represent distance in west-east direction. Y represents distance in north-south direction</param>
+        /// <returns>A vector in pixel coordinates on the texture. Zooming and padding doesn't change this</returns>
+        public Vector2f WensToPx(Vector2f vecWens) {
+            var vecPx = new Vector2f {
+                X = (vecWens.X - vecWens.Y) * HalfWidth,
+                Y = (vecWens.X + vecWens.Y) * HalfHeight
             };
-            return vecIso;
+            return vecPx;
         }
+        
+        /// <summary>
+        /// Converts tile positions in world positions to pixels.
+        /// </summary>
+        /// <param name="vecWens">A vector in Wens coordinates. X represent distance in west-east direction. Y represents distance in north-south direction</param>
+        /// <returns>A vector in pixel coordinates on the texture. Zooming and padding doesn't change this</returns>
+        /// <param name="textureRect"></param>
+        /// <returns></returns>
+        public Vector2f WensToPx(Vector2f vecWens, IntRect textureRect) {
+            var vecPx = WensToPx(vecWens);
+            vecPx.X -= (textureRect.Width - TileWidth) / 2;
+            vecPx.Y -= textureRect.Height - textureRect.Width / 2;
 
-        public Vector2f TileToCoordinates(Vector2f vecIso, IntRect textureRect) {
-            var vec2D = TileToCoordinates(vecIso);
-            vec2D.X -= (textureRect.Width - TileWidth) / 2;
-            vec2D.Y -= (textureRect.Height - textureRect.Width / 2);
-
-            return vec2D;
+            return vecPx;
         }
     }
 }
