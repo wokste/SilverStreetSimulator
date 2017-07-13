@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SFML.Window;
+﻿using SFML.Window;
 
 namespace CitySimulator {
     class CityMap {
@@ -15,13 +14,13 @@ namespace CitySimulator {
             Terrain = new Tile[Width, Height];
         }
 
-        internal bool FreeArea(Vector2i pos, Vector2i size) {
+        internal bool IsFreeArea(Vector2i pos, Vector2i size) {
             if (pos.X < 0 || pos.Y < 0 || pos.X + size.X >= Width || pos.Y + size.Y >= Height) {
                 return false;
             }
 
-            for (int x = pos.X; x < pos.X + size.X; x++) {
-                for (int y = pos.Y; y < pos.Y + size.Y; y++) {
+            for (var x = pos.X; x < pos.X + size.X; x++) {
+                for (var y = pos.Y; y < pos.Y + size.Y; y++) {
                     var tile = Terrain[x, y];
                     if (tile.Terrain == 2) {
                         return false;
@@ -36,11 +35,11 @@ namespace CitySimulator {
         }
 
         internal bool PlaceBuilding(Vector2i position, BuildingType type) {
-            if (!FreeArea(position, type.Size)) {
+            if (!IsFreeArea(position, type.Size)) {
                 return false;
             }
 
-            Building building = new Building {
+            var building = new Building {
                 Type = type
             };
 

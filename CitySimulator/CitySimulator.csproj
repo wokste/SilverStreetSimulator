@@ -90,6 +90,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SfmlCityRenderer.cs" />
     <Compile Include="ExtentionMethods.cs" />
+    <Compile Include="ZoneManager.cs" />
+    <Compile Include="ZoneType.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

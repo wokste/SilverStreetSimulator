@@ -1,8 +1,5 @@
-﻿using System;
-using System.Drawing;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using SFML.Window;
-using Color = SFML.Graphics.Color;
 using Image = SFML.Graphics.Image;
 
 namespace CitySimulator {
@@ -35,14 +32,10 @@ namespace CitySimulator {
         }
 
         private void DrawTerrainIso(RenderTarget target) {
-            var x0 = 0;
-            var x1 = _cityMap.Width;
+            var area = GetRenderArea(target);
 
-            var y0 = 0;
-            var y1 = _cityMap.Height;
-
-            for (var x = x0; x < x1; x++) {
-                for (var y = y0; y < y1; y++) {
+            for (var x = area.Left; x < area.Left + area.Width; x++) {
+                for (var y = area.Top; y < area.Top + area.Height; y++) {
                     var vec2D = new Vector2f(x, y);
                     var vecIso = ToIso(vec2D);
                     vecIso.X *= 32;
@@ -77,14 +70,10 @@ namespace CitySimulator {
         }
 
         private void DrawBuildingsIso(RenderTarget target) {
-            var x0 = 0;
-            var x1 = _cityMap.Width;
+            var area = GetRenderArea(target);
 
-            var y0 = 0;
-            var y1 = _cityMap.Height;
-
-            for (var x = x0; x < x1; x++) {
-                for (var y = y0; y < y1; y++) {
+            for (var x = area.Left; x < area.Left + area.Width; x++) {
+                for (var y = area.Top; y < area.Top + area.Height; y++) {
                     var building = _cityMap.Terrain[x, y].Building;
 
                     if (building == null)
@@ -105,6 +94,10 @@ namespace CitySimulator {
                     target.Draw(_buildingSprite);
                 }
             }
+        }
+
+        private IntRect GetRenderArea(RenderTarget target) {
+            return new IntRect(0,0, _cityMap.Width, _cityMap.Height);
         }
     }
 }

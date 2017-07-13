@@ -47,52 +47,23 @@ namespace CitySimulator {
         }
 
         private void CreateVillage(CityMap cityMap) {
-            List<BuildingType> resSmall = new List<BuildingType>();
-            List<BuildingType> resLarge = new List<BuildingType>();
+            ZoneManager zoneManager = new ZoneManager();
+            zoneManager.Load(@"D:\AppData\Local\CitySimulator\Assets\buildings.xml");
 
-            resSmall.Add(new BuildingType {
-                Size = new Vector2i(1,1),
-                TextureRect = new IntRect(0,0,64,64)
-            });
-            resSmall.Add(new BuildingType {
-                Size = new Vector2i(1, 1),
-                TextureRect = new IntRect(64, 0, 64, 64)
-            });
-            resSmall.Add(new BuildingType {
-                Size = new Vector2i(1, 1),
-                TextureRect = new IntRect(128, 0, 64, 64)
-            });
-            resLarge.Add(new BuildingType {
-                Size = new Vector2i(1, 1),
-                TextureRect = new IntRect(0, 64, 64, 64)
-            });
-            resLarge.Add(new BuildingType {
-                Size = new Vector2i(1, 1),
-                TextureRect = new IntRect(64, 64, 64, 64)
-            });
-            resLarge.Add(new BuildingType {
-                Size = new Vector2i(1, 1),
-                TextureRect = new IntRect(128, 64, 64, 64)
-            });
-            resLarge.Add(new BuildingType {
-                Size = new Vector2i(1, 1),
-                TextureRect = new IntRect(192, 64, 64, 64)
-            });
-            resLarge.Add(new BuildingType {
-                Size = new Vector2i(2, 2),
-                TextureRect = new IntRect(0, 128, 128, 128)
-            });
+            var resSmall = zoneManager[0];
+            var resLarge = zoneManager[1];
 
-
-            for (int i = 0; i < 20; i++) {
+            for (var i = 0; i < 20; i++) {
                 var x = _rnd.Next(cityMap.Width - 1);
                 var y = _rnd.Next(cityMap.Height - 1);
+
                 for (var dx = -8; dx <= 8; dx++) {
                     for (var dy = -1; dy <= 1; dy += 2) {
-                        var buildingType = Math.Abs(dx) < _rnd.Next(3, 5)
-                            ? resLarge[_rnd.Next(resLarge.Count)]
-                            : resSmall[_rnd.Next(resSmall.Count)];
-                        cityMap.PlaceBuilding(new Vector2i(x + dx, y + dy), buildingType);
+                        var zone = Math.Abs(dx) < _rnd.Next(3, 5)
+                            ? resLarge
+                            : resSmall;
+
+                        cityMap.PlaceBuilding(new Vector2i(x + dx, y + dy), zone.GetRandom(_rnd));
                     }
                 }
             }

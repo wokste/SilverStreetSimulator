@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CitySimulator {
     class PerlinNoise {
@@ -55,8 +51,8 @@ namespace CitySimulator {
             var total = 0f;
 
             for(var i = 0; i < Octaves; i++) {
-                float frequency = (float)Math.Pow(2,i) / Scale;
-                float amplitude = (float)Math.Pow(Persistence, i);
+                var frequency = (float)Math.Pow(2,i) / Scale;
+                var amplitude = (float)Math.Pow(Persistence, i);
 
                 total += InterpolatedNoise(x * frequency, y * frequency) * amplitude;
             }
