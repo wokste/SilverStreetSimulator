@@ -5,6 +5,7 @@ using Image = SFML.Graphics.Image;
 namespace CitySimulator {
     class SfmlCityRenderer : Drawable {
         private readonly CityMap _cityMap;
+        private IsometricView _isometricView = new IsometricView();
 
         private readonly Sprite _tileSetSprite;
         private readonly Sprite _buildingSprite;
@@ -37,11 +38,7 @@ namespace CitySimulator {
             for (var x = area.Left; x < area.Left + area.Width; x++) {
                 for (var y = area.Top; y < area.Top + area.Height; y++) {
                     var vec2D = new Vector2f(x, y);
-                    var vecIso = ToIso(vec2D);
-                    vecIso.X *= 32;
-                    vecIso.Y *= 16;
-
-                    vecIso.X -= 32;
+                    var vecIso = _isometricView.TileToCoordinates(vec2D);
 
                     _tileSetSprite.Position = vecIso;
 
@@ -53,21 +50,6 @@ namespace CitySimulator {
             }
         }
 
-        Vector2f To2D(Vector2f vecIso) {
-            var vec2D = new Vector2f {
-                X = (vecIso.Y + vecIso.X) / 2,
-                Y = (vecIso.Y - vecIso.X) / 2
-            };
-            return vec2D;
-        }
-
-        Vector2f ToIso(Vector2f vec2D) {
-            var vecIso = new Vector2f { 
-                X = vec2D.X - vec2D.Y,
-                Y = vec2D.X + vec2D.Y
-            };
-            return vecIso;
-        }
 
         private void DrawBuildingsIso(RenderTarget target) {
             var area = GetRenderArea(target);
@@ -80,12 +62,7 @@ namespace CitySimulator {
                         continue;
 
                     var vec2D = new Vector2f(x,y);
-                    var vecIso = ToIso(vec2D);
-                    vecIso.X *= 32;
-                    vecIso.Y *= 16;
-
-                    vecIso.X -= (int)(building.Type.TextureRect.Width / 2);
-                    vecIso.Y -= building.Type.Height; // Adjust for building height
+                    var vecIso = _isometricView.TileToCoordinates(vec2D, building.Type.TextureRect);
 
                     _buildingSprite.Position = vecIso;
 
