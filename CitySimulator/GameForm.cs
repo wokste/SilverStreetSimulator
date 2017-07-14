@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Deployment.Application;
+using System.Diagnostics;
 using CitySimulator.Tools;
 using SFML.Graphics;
 using SFML.Window;
@@ -12,6 +14,7 @@ namespace CitySimulator {
 
         private BuildZoneTool _tool = null;
         private readonly ZoneManager _zoneManager = new ZoneManager();
+        public double Money = 10000;
 
         internal GameForm() {
             // Request a 24-bits depth buffer when creating the window
@@ -56,13 +59,13 @@ namespace CitySimulator {
 
         private void OMouseButtonReleased(object sender, MouseButtonEventArgs e) {
             if (e.Button == Mouse.Button.Left) {
-                _tool?.MouseUp(_city, GetWorldCoordinates(e.X, e.Y));
+                _tool?.MouseUp(this, _city, GetWorldCoordinates(e.X, e.Y));
             }
         }
 
         private void OnMouseButtonPressed(object sender, MouseButtonEventArgs e) {
             if (e.Button == Mouse.Button.Left) {
-                _tool?.MouseDown(_city, GetWorldCoordinates(e.X, e.Y));
+                _tool?.MouseDown(this, _city, GetWorldCoordinates(e.X, e.Y));
             }
         }
 
@@ -75,9 +78,17 @@ namespace CitySimulator {
 
         internal void GameLoop() { 
             // Start the game loop
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             while (_window.IsOpen()) {
                 // Process events
                 _window.DispatchEvents();
+
+                var timeMs = stopwatch.ElapsedMilliseconds;
+                stopwatch.Restart();
+
+                Update(timeMs);
 
                 _renderer.Draw(_window, RenderStates.Default);
 
@@ -86,6 +97,28 @@ namespace CitySimulator {
             }
         }
         
+        private void Update(long timeMs) {
+            var population = 0;
+            var jobs = 0;
+
+            for (int x = 0; x < _city.Width; x++) {
+                for (int y = 0; y < _city.Height; y++) {
+                    var building = _city.Terrain[x, y].Building;
+                    if (building != null) {
+                        population += building.Type.Population;
+                        jobs += building.Type.Jobs;
+                    }
+                }
+            }
+
+            var workers = Math.Min(0.7f * population, jobs);
+            var income = workers * 0.1;
+
+            Money += income * timeMs / 1000;
+
+            _window.SetTitle($"Silver Street Simulator - {Money:C} +- {income:C}");
+        }
+
         private void OnMouseMoved(object sender, MouseMoveEventArgs e) {
             var mouseDrag = _lastMousePos - new Vector2f(e.X, e.Y);
             _lastMousePos = new Vector2f(e.X, e.Y);
