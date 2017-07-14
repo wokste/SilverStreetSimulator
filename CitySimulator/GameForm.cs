@@ -21,8 +21,6 @@ namespace CitySimulator {
 
             // Create the main window
             _window = new RenderWindow(new VideoMode(640, 480), "Silver Street Simulator", Styles.Default, contextSettings);
-
-            // Make it the active window for OpenGL calls
             _window.SetActive();
 
             // Setup event handlers
@@ -58,32 +56,21 @@ namespace CitySimulator {
 
         private void OMouseButtonReleased(object sender, MouseButtonEventArgs e) {
             if (e.Button == Mouse.Button.Left) {
-                if (_tool != null) {
-                    _tool.MouseUp(_city, GetWorldCoordinates(e.X, e.Y));
-                }
+                _tool?.MouseUp(_city, GetWorldCoordinates(e.X, e.Y));
             }
         }
 
         private void OnMouseButtonPressed(object sender, MouseButtonEventArgs e) {
             if (e.Button == Mouse.Button.Left) {
-                if (_tool != null) {
-                    _tool.MouseDown(_city, GetWorldCoordinates(e.X, e.Y));
-                }
+                _tool?.MouseDown(_city, GetWorldCoordinates(e.X, e.Y));
             }
         }
 
         private Vector2i GetWorldCoordinates(int mouseX, int mouseY) {
-
             var vecScreenPx = new Vector2f(mouseX, mouseY);
-
-            var view = _window.GetView();
-            var vecWorldPx = vecScreenPx + view.Center - view.Size / 2;
-            _window.SetView(view);
-
-            IsometricView isoView = new IsometricView();
-
-            var vecWens = isoView.PxToWens(vecWorldPx);
-            return new Vector2i((int)vecWens.X, (int)vecWens.Y);
+            var vecWorldPx = _renderer.View.ScreenPxToWorldPx(vecScreenPx);
+            var vecWens = _renderer.View.WorldPxToWens(vecWorldPx);
+            return vecWens;
         }
 
         internal void GameLoop() { 
@@ -104,17 +91,15 @@ namespace CitySimulator {
             _lastMousePos = new Vector2f(e.X, e.Y);
 
             if (Mouse.IsButtonPressed(Mouse.Button.Right)) {
-                var view = _window.GetView();
-                view.Move(mouseDrag);
-                _window.SetView(view);
+                _renderer.View.TopLeftPos += (mouseDrag * _renderer.View.Zoom);
             }
         }
 
         private void OnMouseWheelMoved(object sender, MouseWheelEventArgs e) {
             if (e.Delta > 0) {
-                Zoom(0.5f);
+                Zoom(0.5f, new Vector2f(e.X,e.Y));
             } else {
-                Zoom(2f);
+                Zoom(2f, new Vector2f(e.X, e.Y));
             }
         }
 
@@ -125,10 +110,12 @@ namespace CitySimulator {
             _window.Close();
         }
 
-        private void Zoom(float f) {
-            var view = _window.GetView();
-            view.Zoom(f);
-            _window.SetView(view);
+        private void Zoom(float f, Vector2f mousePos) {
+            var mousePosWorld = _renderer.View.ScreenPxToWorldPx(mousePos);
+            _renderer.View.Zoom *= f;
+            var mousePosNew = _renderer.View.WorldPxToScreenPx(mousePosWorld);
+
+            _renderer.View.TopLeftPos += (mousePosNew - mousePos);
         }
 
         /// <summary>
@@ -136,6 +123,7 @@ namespace CitySimulator {
         /// </summary>
         private void OnResized(object sender, SizeEventArgs e) {
             var view = _window.GetView();
+            view.Center = _window.Size.ToVector2F() / 2;
             view.Size = _window.Size.ToVector2F();
             _window.SetView(view);
         }

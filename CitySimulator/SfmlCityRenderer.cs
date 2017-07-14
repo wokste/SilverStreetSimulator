@@ -5,7 +5,7 @@ using Image = SFML.Graphics.Image;
 namespace CitySimulator {
     class SfmlCityRenderer : Drawable {
         private readonly CityMap _cityMap;
-        private IsometricView _isometricView = new IsometricView();
+        public IsometricView View = new IsometricView();
 
         private readonly Sprite _tileSetSprite;
         private readonly Sprite _buildingSprite;
@@ -35,10 +35,12 @@ namespace CitySimulator {
         private void DrawTerrainIso(RenderTarget target) {
             var area = GetRenderArea(target);
 
+            _tileSetSprite.Scale = new Vector2f(1 / View.Zoom, 1 / View.Zoom);
+
             for (var x = area.Left; x < area.Left + area.Width; x++) {
                 for (var y = area.Top; y < area.Top + area.Height; y++) {
                     var vec2D = new Vector2i(x, y);
-                    var vecIso = _isometricView.WensToPx(vec2D);
+                    var vecIso = View.WensToScreenPx(vec2D);
 
                     _tileSetSprite.Position = vecIso;
 
@@ -50,9 +52,10 @@ namespace CitySimulator {
             }
         }
 
-
         private void DrawBuildingsIso(RenderTarget target) {
             var area = GetRenderArea(target);
+
+            _buildingSprite.Scale = new Vector2f(1 / View.Zoom, 1 / View.Zoom);
 
             for (var x = area.Left; x < area.Left + area.Width; x++) {
                 for (var y = area.Top; y < area.Top + area.Height; y++) {
@@ -61,10 +64,11 @@ namespace CitySimulator {
                     if (building == null)
                         continue;
 
-                    var vec2D = new Vector2i(x,y);
-                    var vecIso = _isometricView.WensToPx(vec2D, building.Type.TextureRect);
+                    var vecWens = new Vector2i(x,y);
+                    var vecWorld = View.WensToWorldPx(vecWens, building.Type.TextureRect);
+                    var vecScreen = View.WorldPxToScreenPx(vecWorld);
 
-                    _buildingSprite.Position = vecIso;
+                    _buildingSprite.Position = vecScreen;
 
                     _buildingSprite.TextureRect = building.Type.TextureRect;
                     
