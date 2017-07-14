@@ -11,7 +11,7 @@ namespace CitySimulator {
         private Vector2f _lastMousePos;
 
         private BuildZoneTool _tool = null;
-        private ZoneManager _zoneManager = new ZoneManager();
+        private readonly ZoneManager _zoneManager = new ZoneManager();
 
         internal GameForm() {
             // Request a 24-bits depth buffer when creating the window
@@ -59,7 +59,7 @@ namespace CitySimulator {
         private void OMouseButtonReleased(object sender, MouseButtonEventArgs e) {
             if (e.Button == Mouse.Button.Left) {
                 if (_tool != null) {
-                    _tool.MouseUp(_city, getWorldCoordinates(e.X, e.Y));
+                    _tool.MouseUp(_city, GetWorldCoordinates(e.X, e.Y));
                 }
             }
         }
@@ -67,12 +67,12 @@ namespace CitySimulator {
         private void OnMouseButtonPressed(object sender, MouseButtonEventArgs e) {
             if (e.Button == Mouse.Button.Left) {
                 if (_tool != null) {
-                    _tool.MouseDown(_city, getWorldCoordinates(e.X, e.Y));
+                    _tool.MouseDown(_city, GetWorldCoordinates(e.X, e.Y));
                 }
             }
         }
 
-        private Vector2i getWorldCoordinates(int mouseX, int mouseY) {
+        private Vector2i GetWorldCoordinates(int mouseX, int mouseY) {
 
             var vecScreenPx = new Vector2f(mouseX, mouseY);
 

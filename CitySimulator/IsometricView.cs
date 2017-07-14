@@ -16,13 +16,15 @@ namespace CitySimulator {
         /// </summary>
         /// <param name="vecPx">A vector in pixel coordinates on the texture. Zooming and padding shouldn't change this</param>
         /// <returns>A vector in Wens coordinates. X represent distance in west-east direction. Y represents distance in north-south direction</returns>
-        public Vector2f PxToWens(Vector2f vecPx) {
+        public Vector2i PxToWens(Vector2f vecPx) {
             vecPx.X /= TileWidth;
             vecPx.Y /= TileHeight;
 
-            var vecWens = new Vector2f {
-                X = vecPx.Y + vecPx.X,
-                Y = vecPx.Y - vecPx.X
+            vecPx.X -= 0.5f;
+
+            var vecWens = new Vector2i {
+                X = (int)Math.Floor(vecPx.Y + vecPx.X),
+                Y = (int)Math.Floor(vecPx.Y - vecPx.X)
             };
             return vecWens;
         }
@@ -32,7 +34,7 @@ namespace CitySimulator {
         /// </summary>
         /// <param name="vecWens">A vector in Wens coordinates. X represent distance in west-east direction. Y represents distance in north-south direction</param>
         /// <returns>A vector in pixel coordinates on the texture. Zooming and padding doesn't change this</returns>
-        public Vector2f WensToPx(Vector2f vecWens) {
+        public Vector2f WensToPx(Vector2i vecWens) {
             var vecPx = new Vector2f {
                 X = (vecWens.X - vecWens.Y) * HalfWidth,
                 Y = (vecWens.X + vecWens.Y) * HalfHeight
@@ -47,7 +49,7 @@ namespace CitySimulator {
         /// <returns>A vector in pixel coordinates on the texture. Zooming and padding doesn't change this</returns>
         /// <param name="textureRect"></param>
         /// <returns></returns>
-        public Vector2f WensToPx(Vector2f vecWens, IntRect textureRect) {
+        public Vector2f WensToPx(Vector2i vecWens, IntRect textureRect) {
             var vecPx = WensToPx(vecWens);
             vecPx.X -= (textureRect.Width - TileWidth) / 2;
             vecPx.Y -= textureRect.Height - textureRect.Width / 2;
