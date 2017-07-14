@@ -3,7 +3,11 @@ using SFML.Window;
 
 namespace CitySimulator {
     class CityGenerator {
-        private readonly Random _rnd = new Random();
+        private readonly Random _rnd;
+
+        internal CityGenerator(int seed) {
+            _rnd = new Random(seed);
+        }
 
         internal CityMap GenerateCity() {
             var cityMap = new CityMap(128, 128);

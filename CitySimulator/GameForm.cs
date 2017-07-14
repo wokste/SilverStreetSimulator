@@ -8,13 +8,12 @@ using SFML.Window;
 namespace CitySimulator {
     internal class GameForm {
         private readonly RenderWindow _window;
-        private readonly CityMap _city;
         private readonly SfmlCityRenderer _renderer;
         private Vector2f _lastMousePos;
 
         private BuildZoneTool _tool = null;
         private readonly ZoneManager _zoneManager = new ZoneManager();
-        public double Money = 10000;
+        private Game _game;
 
         internal GameForm() {
             // Request a 24-bits depth buffer when creating the window
@@ -38,8 +37,12 @@ namespace CitySimulator {
             _window.KeyPressed += OnKeyPressed;
 
             _zoneManager.Load(@"D:\AppData\Local\CitySimulator\Assets\buildings.xml");
-            _city = new CityGenerator().GenerateCity();
-            _renderer = new SfmlCityRenderer(_city);
+
+            Random rnd = new Random();
+
+            _game = new Game(rnd.Next());
+
+            _renderer = new SfmlCityRenderer(_game.City);
 
         }
 
@@ -59,13 +62,13 @@ namespace CitySimulator {
 
         private void OMouseButtonReleased(object sender, MouseButtonEventArgs e) {
             if (e.Button == Mouse.Button.Left) {
-                _tool?.MouseUp(this, _city, GetWorldCoordinates(e.X, e.Y));
+                _tool?.MouseUp(_game, GetWorldCoordinates(e.X, e.Y));
             }
         }
 
         private void OnMouseButtonPressed(object sender, MouseButtonEventArgs e) {
             if (e.Button == Mouse.Button.Left) {
-                _tool?.MouseDown(this, _city, GetWorldCoordinates(e.X, e.Y));
+                _tool?.MouseDown(_game, GetWorldCoordinates(e.X, e.Y));
             }
         }
 
@@ -78,7 +81,7 @@ namespace CitySimulator {
 
         internal void GameLoop() { 
             // Start the game loop
-            Stopwatch stopwatch = new Stopwatch();
+            var stopwatch = new Stopwatch();
             stopwatch.Start();
 
             while (_window.IsOpen()) {
@@ -98,25 +101,9 @@ namespace CitySimulator {
         }
         
         private void Update(long timeMs) {
-            var population = 0;
-            var jobs = 0;
+            _game.Update(timeMs);
 
-            for (int x = 0; x < _city.Width; x++) {
-                for (int y = 0; y < _city.Height; y++) {
-                    var building = _city.Terrain[x, y].Building;
-                    if (building != null) {
-                        population += building.Type.Population;
-                        jobs += building.Type.Jobs;
-                    }
-                }
-            }
-
-            var workers = Math.Min(0.7f * population, jobs);
-            var income = workers * 0.1;
-
-            Money += income * timeMs / 1000;
-
-            _window.SetTitle($"Silver Street Simulator - {Money:C} +- {income:C}");
+            _window.SetTitle($"Silver Street Simulator - {_game.Money:C} +- {_game.Income:C}");
         }
 
         private void OnMouseMoved(object sender, MouseMoveEventArgs e) {
