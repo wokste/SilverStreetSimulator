@@ -83,7 +83,7 @@ namespace CitySimulator {
         /// <returns></returns>
         public Vector2f WensToWorldPx(Vector2i vecWens, IntRect textureRect) {
             var vecPx = WensToWorldPx(vecWens);
-            vecPx.X -= (textureRect.Width - TileWidth) / 2;
+            vecPx.X -= (textureRect.Width - TileWidth) / 2.0f;
             vecPx.Y -= textureRect.Height - textureRect.Width / 2;
 
             return vecPx;

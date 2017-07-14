@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Deployment.Application;
 using System.Diagnostics;
 using CitySimulator.Tools;
 using SFML.Graphics;
@@ -11,9 +10,9 @@ namespace CitySimulator {
         private readonly SfmlCityRenderer _renderer;
         private Vector2f _lastMousePos;
 
-        private BuildZoneTool _tool = null;
+        private BuildZoneTool _tool;
         private readonly ZoneManager _zoneManager = new ZoneManager();
-        private Game _game;
+        private readonly Game _game;
 
         internal GameForm() {
             // Request a 24-bits depth buffer when creating the window

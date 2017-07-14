@@ -1,5 +1,4 @@
 ﻿using System;
-using SFML.Window;
 
 namespace CitySimulator {
     class CityGenerator {
@@ -16,7 +15,6 @@ namespace CitySimulator {
 
             return cityMap;
         }
-
 
         private void GenerateTerrain(CityMap cityMap) {
             var heightMap = new PerlinNoise {

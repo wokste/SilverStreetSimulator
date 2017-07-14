@@ -8,7 +8,7 @@ namespace CitySimulator.Tools {
         private readonly ZoneType _zone;
 
         private Vector2i _mouseDownPos;
-        private bool _mouseDown = false;
+        private bool _mouseDown;
 
         public BuildZoneTool(ZoneType zone) {
             _zone = zone;
