@@ -19,9 +19,18 @@ namespace CitySimulator {
         /// Converts wens coordinates to screen pixels
         /// </summary>
         /// <param name="vecWens">A vector in Wens coordinates. X represent distance in west-east direction. Y represents distance in north-south direction</param>
-        /// <returns></returns>
+        /// <returns>A vector in screen coordinates</returns>
         public Vector2f WensToScreenPx(Vector2i vecWens) {
             return WorldPxToScreenPx(WensToWorldPx(vecWens));
+        }
+
+        /// <summary>
+        /// Converts screen pixels to wens coordinates
+        /// </summary>
+        /// <param name="vecScreen">A vector in screen coordinates</param>
+        /// <returns>A vector in Wens coordinates. X represent distance in west-east direction. Y represents distance in north-south direction</returns>
+        public Vector2i ScreenPxToWens(Vector2f vecScreen) {
+            return WorldPxToWens(ScreenPxToWorldPx(vecScreen));
         }
 
         /// <summary>
@@ -73,7 +82,7 @@ namespace CitySimulator {
             };
             return vecPx;
         }
-        
+
         /// <summary>
         /// Converts tile positions in world positions to pixels.
         /// </summary>

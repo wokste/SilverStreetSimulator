@@ -12,7 +12,7 @@ namespace CitySimulatorTests {
         /// Tests whether world to local coordinates convert back accurately
         /// </summary>
         [TestMethod()]
-        public void WorldToScreenTest() {
+        public void ScreenToWorldTest() {
             var view = new IsometricView {
                 Zoom = 3.5f,
                 TopLeftPos = new Vector2f(1879,289)
@@ -26,17 +26,33 @@ namespace CitySimulatorTests {
         }
 
         /// <summary>
+        /// Tests whether world to local coordinates convert back accurately
+        /// </summary>
+        [TestMethod()]
+        public void ScreenToTileTest() {
+            var view = new IsometricView {
+                TopLeftPos = new Vector2f(1879, 289)
+            };
+
+            var vecWens = new Vector2i(1, 3);
+            var vecScreenPx = view.WensToScreenPx(vecWens);
+            var vecWensCopy = view.ScreenPxToWens(vecScreenPx + new Vector2f(IsometricView.HalfWidth, IsometricView.HalfHeight));
+
+            Assert.AreEqual(vecWens, vecWensCopy);
+        }
+
+        /// <summary>
         /// Tests whether world to tile coordinates convert back accurately
         /// </summary>
         [TestMethod()]
         public void WorldToTileTest() {
             var view = new IsometricView();
 
-            var tileWens = new Vector2i(1, 3);
-            var tilePx = view.WensToWorldPx(tileWens);
-            var tileWensCopy = view.WorldPxToWens(tilePx + new Vector2f(IsometricView.HalfWidth, IsometricView.HalfHeight));
+            var vecWens = new Vector2i(1, 3);
+            var vecWorldPx = view.WensToWorldPx(vecWens);
+            var vecWensCopy = view.WorldPxToWens(vecWorldPx + new Vector2f(IsometricView.HalfWidth, IsometricView.HalfHeight));
 
-            Assert.AreEqual(tileWens, tileWensCopy);
+            Assert.AreEqual(vecWens, vecWensCopy);
         }
 
         /// <summary>

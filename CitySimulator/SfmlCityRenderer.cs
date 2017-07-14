@@ -1,4 +1,6 @@
-﻿using SFML.Graphics;
+﻿using System;
+using System.Globalization;
+using SFML.Graphics;
 using SFML.Window;
 using Image = SFML.Graphics.Image;
 
@@ -78,7 +80,20 @@ namespace CitySimulator {
         }
 
         private IntRect GetRenderArea(RenderTarget target) {
-            return new IntRect(0,0, _cityMap.Width, _cityMap.Height);
+            var screenX = target.Size.X;
+            var screenY = target.Size.Y;
+            
+            var corner00 = View.ScreenPxToWens(new Vector2f(0, 0));
+            var corner01 = View.ScreenPxToWens(new Vector2f(0, screenY));
+            var corner10 = View.ScreenPxToWens(new Vector2f(screenX, 0));
+            var corner11 = View.ScreenPxToWens(new Vector2f(screenX, screenY));
+            
+            var x0 = Math.Max(corner00.X, 0);
+            var x1 = Math.Min(corner11.X + 1, _cityMap.Width);
+            var y0 = Math.Max(corner10.Y, 0);
+            var y1 = Math.Min(corner01.Y + 1, _cityMap.Height);
+
+            return new IntRect(x0,y0, x1 - x0, y1 - y0);
         }
     }
 }
