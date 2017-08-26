@@ -5,28 +5,25 @@ using SFML.Graphics;
 using SFML.Window;
 
 namespace CitySimulator.Tools {
-    class BuildZoneTool {
+    class BuildZoneTool : Tool {
         private readonly ZoneType _zone;
 
         private Sound Sound;
         private Vector2i _mouseDownPos;
-        private bool _mouseDown;
 
         public BuildZoneTool(SoundManager soundManager, ZoneType zone) {
             _zone = zone;
             Sound = soundManager.GetSound(zone.BuildSoundName);
         }
 
-        public void MouseDown(Game game, Vector2i mouseTile) {
-            _mouseDownPos = mouseTile;
-            _mouseDown = true;
+        protected override void OnMouseDown(Game game, IsometricView view, Vector2f screenPos)
+        {
+            _mouseDownPos = view.ScreenPxToWens(screenPos);
         }
 
-        public void MouseUp(Game game, Vector2i mouseTile) {
-            if (!_mouseDown) {
-                return;
-            }
-            _mouseDown = false;
+        protected override void OnMouseUp(Game game, IsometricView view, Vector2f screenPos)
+        {
+            var mouseTile = view.ScreenPxToWens(screenPos);
 
             var area = new IntRect {
                 Left = Math.Min(_mouseDownPos.X, mouseTile.X),
@@ -48,6 +45,9 @@ namespace CitySimulator.Tools {
 
             FillZone(area, game.City);
         }
+
+
+        protected override void OnMouseDrag(Game game, IsometricView view, Vector2f screenPos) {}
 
         private int CalculateCost(IntRect area, CityMap city) {
             var cells = 0;
@@ -75,10 +75,6 @@ namespace CitySimulator.Tools {
                     city.Terrain[x, y].Zone = _zone.Id;
                 }
             }
-        }
-
-        public void MouseCancel() {
-            _mouseDown = false;
         }
     }
 }

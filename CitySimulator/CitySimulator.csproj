@@ -95,6 +95,7 @@
     <Compile Include="ExtentionMethods.cs" />
     <Compile Include="SoundManager.cs" />
     <Compile Include="Tools\BuildZoneTool.cs" />
+    <Compile Include="Tools\Tool.cs" />
     <Compile Include="ZoneManager.cs" />
     <Compile Include="ZoneType.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

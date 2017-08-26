@@ -56,21 +56,14 @@ namespace CitySimulator {
 
         private void OMouseButtonReleased(object sender, MouseButtonEventArgs e) {
             if (e.Button == Mouse.Button.Left) {
-                _tool?.MouseUp(_game, GetWorldCoordinates(e.X, e.Y));
+                _tool?.MouseUp(_game, _renderer.View, new Vector2f(e.X, e.Y));
             }
         }
 
         private void OnMouseButtonPressed(object sender, MouseButtonEventArgs e) {
             if (e.Button == Mouse.Button.Left) {
-                _tool?.MouseDown(_game, GetWorldCoordinates(e.X, e.Y));
+                _tool?.MouseDown(_game, _renderer.View, new Vector2f(e.X, e.Y));
             }
-        }
-
-        private Vector2i GetWorldCoordinates(int mouseX, int mouseY) {
-            var vecScreenPx = new Vector2f(mouseX, mouseY);
-            var vecWorldPx = _renderer.View.ScreenPxToWorldPx(vecScreenPx);
-            var vecWens = _renderer.View.WorldPxToWens(vecWorldPx);
-            return vecWens;
         }
 
         internal void GameLoop() { 
