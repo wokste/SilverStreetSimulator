@@ -86,6 +86,7 @@
     <Compile Include="GameForm.cs" />
     <Compile Include="CityMap.cs" />
     <Compile Include="CityGenerator.cs" />
+    <Compile Include="GrowthSimulator.cs" />
     <Compile Include="IsometricView.cs" />
     <Compile Include="PerlinNoise.cs" />
     <Compile Include="Program.cs" />

@@ -11,7 +11,6 @@ namespace CitySimulator {
         private Vector2f _lastMousePos;
 
         private BuildZoneTool _tool;
-        private readonly ZoneManager _zoneManager = new ZoneManager();
         private readonly SoundManager _soundManager = new SoundManager();
         private readonly Game _game;
 
@@ -35,9 +34,7 @@ namespace CitySimulator {
             _window.MouseButtonPressed += OnMouseButtonPressed;
             _window.MouseButtonReleased += OMouseButtonReleased;
             _window.KeyPressed += OnKeyPressed;
-
-            _zoneManager.Load($"{Program.AssetsFolder}buildings.xml");
-
+            
             Random rnd = new Random();
 
             _game = new Game(rnd.Next());
@@ -50,7 +47,7 @@ namespace CitySimulator {
             if (e.Code >= Keyboard.Key.Num1 && e.Code <= Keyboard.Key.Num9) {
                 var id = e.Code - Keyboard.Key.Num1;
                 try {
-                    _tool = new BuildZoneTool(_soundManager, _zoneManager[id]);
+                    _tool = new BuildZoneTool(_soundManager, _game.ZoneManager[id]);
                 } catch (IndexOutOfRangeException) {
                     _tool = null;
                 }

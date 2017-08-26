@@ -4,15 +4,24 @@ namespace CitySimulator {
     class Game {
         public double Money = 10000;
         public CityMap City;
+        public readonly ZoneManager ZoneManager;
+        public GrowthSimulator GrowthSimulator;
 
         public double Income { get; internal set; }
 
         public Game(int seed) {
-            var gen = new CityGenerator(seed);
-            City = gen.GenerateCity();
+            ZoneManager = new ZoneManager();
+            ZoneManager.Load($"{Program.AssetsFolder}buildings.xml");
+
+            var cityGenerator = new CityGenerator(seed);
+            City = cityGenerator.GenerateCity();
+
+            GrowthSimulator = new GrowthSimulator(City, ZoneManager);
         }
 
         public void Update(long timeMs) {
+            GrowthSimulator.Update(timeMs);
+
             Income = CalculateIncome();
             Money += Income * timeMs / 1000;
         }

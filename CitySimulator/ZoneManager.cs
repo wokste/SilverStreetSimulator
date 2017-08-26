@@ -28,13 +28,15 @@ namespace CitySimulator {
 
         private void Load(XDocument doc) {
             var root = doc.Root;
+            
+            int id = 0;
 
             if (root == null) {
                 throw new Exception("XML not well formatted. Root element missing.");
             }
 
             foreach (var zoneXmlElem in root.Elements()) {
-                var zone = new ZoneType();
+                var zone = new ZoneType(id++);
 
                 zone.Load(zoneXmlElem);
                 _zoneTypes.Add(zone);

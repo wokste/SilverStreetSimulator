@@ -11,8 +11,13 @@ namespace CitySimulator {
         internal string Name { get; private set; }
         public int BuildCost { get; private set; }
         public string BuildSoundName { get; private set; }
+        public int Id { get; }
 
         private readonly List<BuildingType> _buildings = new List<BuildingType>();
+
+        internal ZoneType(int id) {
+            Id = id;
+        }
 
         internal BuildingType GetRandom(Random rnd) {
             return _buildings[rnd.Next(_buildings.Count)];

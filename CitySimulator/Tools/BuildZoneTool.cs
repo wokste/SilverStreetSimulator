@@ -62,10 +62,17 @@ namespace CitySimulator.Tools {
         }
 
         private void FillZone(IntRect area, CityMap city) {
+            /*
             var rnd = new Random();
             for (var x = area.Left; x < area.Left + area.Width; x++) {
                 for (var y = area.Top; y < area.Top + area.Height; y++) {
                     city.PlaceBuilding(new Vector2i(x, y), _zone.GetRandom(rnd));
+                }
+            }*/
+
+            for (var x = area.Left; x < area.Left + area.Width; x++){
+                for (var y = area.Top; y < area.Top + area.Height; y++){
+                    city.Terrain[x, y].Zone = _zone.Id;
                 }
             }
         }
