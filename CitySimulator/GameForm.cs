@@ -10,7 +10,7 @@ namespace CitySimulator {
         private readonly SfmlCityRenderer _renderer;
         private Vector2f _lastMousePos;
 
-        private BuildZoneTool _tool;
+        private Tool _tool;
         private readonly SoundManager _soundManager = new SoundManager();
         private readonly Game _game;
 
@@ -44,13 +44,22 @@ namespace CitySimulator {
         }
 
         private void OnKeyPressed(object sender, KeyEventArgs e) {
-            if (e.Code >= Keyboard.Key.Num1 && e.Code <= Keyboard.Key.Num9) {
-                var id = e.Code - Keyboard.Key.Num1;
-                try {
-                    _tool = new BuildZoneTool(_soundManager, _game.ZoneManager[id]);
-                } catch (IndexOutOfRangeException) {
-                    _tool = null;
-                }
+            switch (e.Code) {
+                case var k when (k >= Keyboard.Key.Num1 && e.Code <= Keyboard.Key.Num9): {
+                        var id = k - Keyboard.Key.Num1;
+                        try {
+                            _tool = new BuildZoneTool(_soundManager, _game.ZoneManager[id]);
+                        } catch (IndexOutOfRangeException) {
+                            _tool = null;
+                        }
+                    }
+                    break;
+                case Keyboard.Key.R:
+                    _tool = new BuildRoadTool(_soundManager, _game.ZoneManager[4]);
+                    break;
+                case Keyboard.Key.B:
+                    _tool = new BuildozerTool(_soundManager, _game.ZoneManager[4]);
+                    break;
             }
         }
 
@@ -99,6 +108,8 @@ namespace CitySimulator {
 
             if (Mouse.IsButtonPressed(Mouse.Button.Right)) {
                 _renderer.View.TopLeftPos += (mouseDrag * _renderer.View.Zoom);
+            } if (Mouse.IsButtonPressed(Mouse.Button.Left)) {
+                _tool.MouseDrag(_game, _renderer.View, new Vector2f(e.X, e.Y));
             }
         }
 
