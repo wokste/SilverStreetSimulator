@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using SFML.Audio;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -7,11 +8,13 @@ namespace CitySimulator.Tools {
     class BuildZoneTool {
         private readonly ZoneType _zone;
 
+        private Sound Sound;
         private Vector2i _mouseDownPos;
         private bool _mouseDown;
 
-        public BuildZoneTool(ZoneType zone) {
+        public BuildZoneTool(SoundManager soundManager, ZoneType zone) {
             _zone = zone;
+            Sound = soundManager.GetSound(zone.BuildSoundName);
         }
 
         public void MouseDown(Game game, Vector2i mouseTile) {
@@ -38,6 +41,8 @@ namespace CitySimulator.Tools {
                 Debug.WriteLine($"insufficient money. Need: {cost} Has {game.Money}");
                 return;
             }
+
+            Sound.Play();
 
             game.Money -= cost;
 

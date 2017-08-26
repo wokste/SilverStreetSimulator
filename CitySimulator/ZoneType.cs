@@ -9,7 +9,8 @@ namespace CitySimulator {
     class ZoneType {
         internal string Tag { get; private set; }
         internal string Name { get; private set; }
-        public int BuildCost { get; internal set; }
+        public int BuildCost { get; private set; }
+        public string BuildSoundName { get; private set; }
 
         private readonly List<BuildingType> _buildings = new List<BuildingType>();
 
@@ -21,7 +22,8 @@ namespace CitySimulator {
             Tag = zoneXmlElem.GetString("name");
             Name = zoneXmlElem.GetString("name",true);
             BuildCost = zoneXmlElem.GetInt("build_cost");
-            
+            BuildSoundName = zoneXmlElem.GetString("sound", true);
+
             foreach (var buildingGroupElem in zoneXmlElem.Elements()) {
                 var sizeArray = buildingGroupElem.Attribute("size").Value.Split('x').Select(int.Parse).ToArray();
                 var size = new Vector2i(sizeArray[0], sizeArray[1]);

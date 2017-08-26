@@ -12,6 +12,7 @@ namespace CitySimulator {
 
         private BuildZoneTool _tool;
         private readonly ZoneManager _zoneManager = new ZoneManager();
+        private readonly SoundManager _soundManager = new SoundManager();
         private readonly Game _game;
 
         internal GameForm() {
@@ -49,7 +50,7 @@ namespace CitySimulator {
             if (e.Code >= Keyboard.Key.Num1 && e.Code <= Keyboard.Key.Num9) {
                 var id = e.Code - Keyboard.Key.Num1;
                 try {
-                    _tool = new BuildZoneTool(_zoneManager[id]);
+                    _tool = new BuildZoneTool(_soundManager, _zoneManager[id]);
                 } catch (IndexOutOfRangeException) {
                     _tool = null;
                 }
