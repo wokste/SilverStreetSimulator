@@ -5,7 +5,7 @@ using SFML.Graphics;
 using SFML.Window;
 
 namespace CitySimulator {
-    internal class GameForm {
+    internal class GameForm : IDisposable{
         private readonly RenderWindow _window;
         private readonly SfmlCityRenderer _renderer;
         private Vector2f _lastMousePos;
@@ -46,16 +46,13 @@ namespace CitySimulator {
         }
 
         private void OnKeyPressed(object sender, KeyEventArgs e) {
-            switch (e.Code) {
-                case Keyboard.Key.Num1:
-                    _tool = new BuildZoneTool(_zoneManager[0]);
-                    break;
-                case Keyboard.Key.Num2:
-                    _tool = new BuildZoneTool(_zoneManager[1]);
-                    break;
-                case Keyboard.Key.Num3:
-                    _tool = new BuildZoneTool(_zoneManager[2]);
-                    break;
+            if (e.Code >= Keyboard.Key.Num1 && e.Code <= Keyboard.Key.Num9) {
+                var id = e.Code - Keyboard.Key.Num1;
+                try {
+                    _tool = new BuildZoneTool(_zoneManager[id]);
+                } catch (IndexOutOfRangeException) {
+                    _tool = null;
+                }
             }
         }
 
@@ -145,6 +142,10 @@ namespace CitySimulator {
             view.Center = _window.Size.ToVector2F() / 2;
             view.Size = _window.Size.ToVector2F();
             _window.SetView(view);
+        }
+
+        public void Dispose() {
+            _window?.Dispose();
         }
     }
 }

@@ -8,7 +8,8 @@ namespace CitySimulator {
         private readonly List<ZoneType> _zoneTypes = new List<ZoneType>();
         
         internal ZoneType this[int key] => _zoneTypes[key];
-        
+        internal ZoneType this[string key] => _zoneTypes[GetId(key)];
+
         internal int GetId(string tag) {
             var i = _zoneTypes.FindIndex(z => z.Tag == tag);
 
