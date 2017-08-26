@@ -21,7 +21,7 @@ namespace CitySimulator {
             Tag = zoneXmlElem.GetString("name");
             Name = zoneXmlElem.GetString("name",true);
             BuildCost = zoneXmlElem.GetInt("build_cost");
-
+            
             foreach (var buildingGroupElem in zoneXmlElem.Elements()) {
                 var sizeArray = buildingGroupElem.Attribute("size").Value.Split('x').Select(int.Parse).ToArray();
                 var size = new Vector2i(sizeArray[0], sizeArray[1]);

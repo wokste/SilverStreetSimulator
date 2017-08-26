@@ -20,7 +20,7 @@ namespace CitySimulator {
         }
 
         private Sprite MakeSprite(string texName) {
-            var image = new Image($"D:\\AppData\\Local\\CitySimulator\\Assets\\{texName}");
+            var image = new Image($"{Program.AssetsFolder}{texName}");
             var texture = new Texture(image);
             return new Sprite {
                 Texture = texture

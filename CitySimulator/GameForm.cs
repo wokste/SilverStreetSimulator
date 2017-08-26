@@ -35,7 +35,7 @@ namespace CitySimulator {
             _window.MouseButtonReleased += OMouseButtonReleased;
             _window.KeyPressed += OnKeyPressed;
 
-            _zoneManager.Load(@"D:\AppData\Local\CitySimulator\Assets\buildings.xml");
+            _zoneManager.Load($"{Program.AssetsFolder}buildings.xml");
 
             Random rnd = new Random();
 
