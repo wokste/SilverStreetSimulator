@@ -21,10 +21,10 @@ namespace CitySimulator
                 for (var y = 0; y < _map.Height; y++)
                 {
                     var tile = _map.Terrain[x, y];
-                    if (tile.Zone < 0)
+                    if (tile.ZoneId < 0)
                         continue;
 
-                    var Zone = _zoneManager[tile.Zone];
+                    var Zone = _zoneManager[tile.ZoneId];
 
                     if (_rnd.Next(1, 1000) < timeMs)
                     {

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using CitySimulator.Tools;
 using SFML.Graphics;
 using SFML.Window;
+using System.Collections.Generic;
 
 namespace CitySimulator {
     internal class GameForm : IDisposable{
@@ -11,6 +12,7 @@ namespace CitySimulator {
         private Vector2f _lastMousePos;
 
         private Tool _tool;
+        private List<Tool> toolbox;
         private readonly SoundManager _soundManager = new SoundManager();
         private readonly Game _game;
 
@@ -41,25 +43,17 @@ namespace CitySimulator {
 
             _renderer = new SfmlCityRenderer(_game.City);
 
+            toolbox = ToolboxFactory.getTools(_game.City, _game.ZoneManager);
         }
 
         private void OnKeyPressed(object sender, KeyEventArgs e) {
-            switch (e.Code) {
-                case var k when (k >= Keyboard.Key.Num1 && e.Code <= Keyboard.Key.Num9): {
-                        var id = k - Keyboard.Key.Num1;
-                        try {
-                            _tool = new BuildZoneTool(_soundManager, _game.ZoneManager[id]);
-                        } catch (IndexOutOfRangeException) {
-                            _tool = null;
-                        }
-                    }
-                    break;
-                case Keyboard.Key.R:
-                    _tool = new BuildRoadTool(_soundManager, _game.ZoneManager[4]);
-                    break;
-                case Keyboard.Key.B:
-                    _tool = new BuildozerTool(_soundManager, _game.ZoneManager[4]);
-                    break;
+            if (e.Code >= Keyboard.Key.Num1 && e.Code <= Keyboard.Key.Num9) {
+                var id = e.Code - Keyboard.Key.Num1;
+                try {
+                    _tool = toolbox[id];
+                } catch (IndexOutOfRangeException) {
+                    _tool = null;
+                }
             }
         }
 

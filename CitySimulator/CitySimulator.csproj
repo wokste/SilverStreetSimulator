@@ -94,10 +94,12 @@
     <Compile Include="SfmlCityRenderer.cs" />
     <Compile Include="ExtentionMethods.cs" />
     <Compile Include="SoundManager.cs" />
-    <Compile Include="Tools\BuildozerTool.cs" />
-    <Compile Include="Tools\BuildRoadTool.cs" />
-    <Compile Include="Tools\BuildZoneTool.cs" />
+    <Compile Include="Tools\AreaSelector.cs" />
+    <Compile Include="Tools\TileTool.cs" />
     <Compile Include="Tools\Tool.cs" />
+    <Compile Include="Tools\ToolboxFactory.cs" />
+    <Compile Include="Tools\ToolEffect.cs" />
+    <Compile Include="Tools\TileFilterResult.cs" />
     <Compile Include="ZoneManager.cs" />
     <Compile Include="ZoneType.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
