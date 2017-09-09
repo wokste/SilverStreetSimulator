@@ -1,4 +1,5 @@
-﻿using SFML.Window;
+﻿using System;
+using SFML.Window;
 
 namespace CitySimulator {
     class CityMap {
@@ -50,6 +51,10 @@ namespace CitySimulator {
             internal int Terrain;
             internal int ZoneId;
             internal Building Building;
+
+            internal bool IsRoad() {
+                return ZoneId == 4;
+            }
         }
     }
 }

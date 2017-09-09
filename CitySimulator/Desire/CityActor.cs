@@ -34,7 +34,8 @@ namespace CitySimulator.Desire {
             if (count == 0)
                 return;
 
-            var openPositions = findOpenPositions(city);
+            var roadNetwork = FindRoadNetwork(city);
+            var openPositions = FindOpenPositions(roadNetwork, city);
 
             for (var i = 0; i < count; i++) {
                 if (!openPositions.Any()) {
@@ -52,19 +53,45 @@ namespace CitySimulator.Desire {
             }
         }
 
-        private IList<Vector2i> findOpenPositions(CityMap city) {
+        private IList<Vector2i> FindRoadNetwork(CityMap city) {
 
             // TODO: This function has an O(n^2) computation power which is likely too slow. Some kind of caching might be useful.
             var list = new List<Vector2i>();
 
-            for (var x = 0; x < city.Width; x++) { 
-                for (var y = 0; y < city.Width; y++) { 
-                    if (city.Terrain[x, y].ZoneId == _zone.Id && city.Terrain[x, y].Building == null) {
+            for (var x = 0; x < city.Width; x++) {
+                for (var y = 0; y < city.Width; y++) {
+                    if (city.Terrain[x, y].IsRoad()) {
                         list.Add(new Vector2i(x, y));
                     }
                 }
             }
             return list;
+        }
+
+        private IList<Vector2i> FindOpenPositions(IList<Vector2i> roads, CityMap city) {
+
+            // TODO: This function has an O(n^2) computation power which is likely too slow. Some kind of caching might be useful.
+            var list = new List<Vector2i>();
+
+            foreach (var roadPos in roads) {
+                var X = roadPos.X;
+                var Y = roadPos.Y;
+
+                var xMin = Math.Max(city.Terrain[X - 1, Y].IsRoad() ? X : X - 3, 0);
+                var xMax = Math.Min(city.Terrain[X + 1, Y].IsRoad() ? X : X + 3, city.Width - 1);
+                var yMin = Math.Max(city.Terrain[X, Y - 1].IsRoad() ? Y : Y - 3, 0);
+                var yMax = Math.Min(city.Terrain[X, Y + 1].IsRoad() ? Y : Y + 3, city.Height - 1);
+                
+                for (var x = xMin; x <= xMax; x++) {
+                    for (var y = yMin; y <= yMax; y++) {
+                        if (city.Terrain[x, y].ZoneId == _zone.Id && city.Terrain[x, y].Building == null) {
+                            list.Add(new Vector2i(x, y));
+                        }
+                    }
+                }
+            }
+            
+            return list.Distinct().ToList();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace CitySimulator.Tools {
                 return TileFilterResult.TERF_AlreadyExists;
 
             // Not placed on roads
-            if (_city.Terrain[x, y].ZoneId == 4)
+            if (_city.Terrain[x, y].IsRoad())
                 return TileFilterResult.TERF_NoBuild;
 
             return TileFilterResult.TERF_CanBuild;
