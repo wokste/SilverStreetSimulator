@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="Building.cs" />
     <Compile Include="BuildingType.cs" />
+    <Compile Include="Desire\CityActor.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameForm.cs" />
     <Compile Include="CityMap.cs" />

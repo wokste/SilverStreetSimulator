@@ -1,36 +1,28 @@
 ﻿using SFML.Window;
 using System;
+using System.Collections.Generic;
 
 namespace CitySimulator
 {
     class GrowthSimulator
     {
         CityMap _map;
-        ZoneManager _zoneManager;
-        Random _rnd = new Random();
+
+        List<Desire.CityActor> _actors = new List<Desire.CityActor>();
 
         internal GrowthSimulator(CityMap map, ZoneManager zoneManager) {
             _map = map;
-            _zoneManager = zoneManager;
+
+            _actors.Add(new Desire.CityActor("Ron Residential", zoneManager[0]));
+            _actors.Add(new Desire.CityActor("Frank Flatlover", zoneManager[1]));
+            _actors.Add(new Desire.CityActor("Steven Smog", zoneManager[2]));
+            _actors.Add(new Desire.CityActor("Cedric Commercial", zoneManager[3]));
         }
 
         internal void Update(long timeMs)
         {
-            for (var x = 0; x < _map.Width; x++)
-            {
-                for (var y = 0; y < _map.Height; y++)
-                {
-                    var tile = _map.Terrain[x, y];
-                    if (tile.ZoneId < 0)
-                        continue;
-
-                    var Zone = _zoneManager[tile.ZoneId];
-
-                    if (_rnd.Next(1, 1000) < timeMs)
-                    {
-                        _map.PlaceBuilding(new Vector2i(x, y), Zone.GetRandom(_rnd));
-                    }
-                }
+            foreach (var actor in _actors){
+                actor.Update(_map, timeMs);
             }
         }
     }
