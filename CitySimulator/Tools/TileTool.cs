@@ -1,15 +1,12 @@
-﻿using System;
-using System.Diagnostics;
-using SFML.Audio;
-using SFML.Graphics;
+﻿using System.Diagnostics;
 using SFML.Window;
 
 namespace CitySimulator.Tools {
     class TileTool : Tool {
         private readonly AreaSelector _area;
-        private readonly ToolEffect _effect;
+        private readonly IToolEffect _effect;
 
-        public TileTool(AreaSelector areaSelector, ToolEffect effect) {
+        public TileTool(AreaSelector areaSelector, IToolEffect effect) {
             _area = areaSelector;
             _effect = effect;
         }

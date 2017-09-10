@@ -1,14 +1,12 @@
-﻿using SFML.Window;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CitySimulator
 {
     class GrowthSimulator
     {
-        CityMap _map;
+        readonly CityMap _map;
 
-        List<Desire.CityActor> _actors = new List<Desire.CityActor>();
+        readonly List<Desire.CityActor> _actors = new List<Desire.CityActor>();
 
         internal GrowthSimulator(CityMap map, ZoneManager zoneManager) {
             _map = map;

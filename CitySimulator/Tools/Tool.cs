@@ -3,7 +3,7 @@
 namespace CitySimulator.Tools{
     abstract class Tool
     {
-        private bool mousePressed;
+        private bool _mousePressed;
 
         /// <summary>
         /// Called when the mouse is clicked while the tool is active
@@ -13,10 +13,10 @@ namespace CitySimulator.Tools{
         /// <param name="screenPos">The screen position in pixels.</param>
         public void MouseDown(Game game, IsometricView view, Vector2f screenPos)
         {
-            if (mousePressed)
+            if (_mousePressed)
                 return;
 
-            mousePressed = true;
+            _mousePressed = true;
 
             OnMouseDown(game, view, screenPos);
         }
@@ -30,10 +30,10 @@ namespace CitySimulator.Tools{
         /// <param name="screenPos">The screen position in pixels.</param>
         public void MouseUp(Game game, IsometricView view, Vector2f screenPos)
         {
-            if (!mousePressed)
+            if (!_mousePressed)
                 return;
 
-            mousePressed = false;
+            _mousePressed = false;
 
             OnMouseUp(game, view, screenPos);
         }
@@ -47,7 +47,7 @@ namespace CitySimulator.Tools{
         /// <param name="screenPos">The screen position in pixels.</param>
         public void MouseDrag(Game game, IsometricView view, Vector2f screenPos)
         {
-            if (!mousePressed)
+            if (!_mousePressed)
                 return;
 
             OnMouseDrag(game, view, screenPos);

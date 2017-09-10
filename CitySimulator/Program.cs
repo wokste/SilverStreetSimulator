@@ -7,8 +7,14 @@
         /// The main entry point for the application.
         /// </summary>
         static void Main() {
-            var frm = new GameForm();
-            frm.GameLoop();
+            //var frm = new GameForm();
+            //frm.GameLoop();
+
+            using (var game = new TkGameWindow()) {
+                game.Run(30.0);
+            }
         }
+
+
     }
 }

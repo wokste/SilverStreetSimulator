@@ -12,8 +12,7 @@ namespace CitySimulator {
         private Vector2f _lastMousePos;
 
         private Tool _tool;
-        private List<Tool> toolbox;
-        private readonly SoundManager _soundManager = new SoundManager();
+        private readonly List<Tool> toolbox;
         private readonly Game _game;
 
         internal GameForm() {
@@ -43,7 +42,7 @@ namespace CitySimulator {
 
             _renderer = new SfmlCityRenderer(_game.City);
 
-            toolbox = ToolboxFactory.getTools(_game.City, _game.ZoneManager);
+            toolbox = ToolboxFactory.GetTools(_game.City, _game.ZoneManager);
         }
 
         private void OnKeyPressed(object sender, KeyEventArgs e) {

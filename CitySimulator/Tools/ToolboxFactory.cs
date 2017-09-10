@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CitySimulator.Tools {
     class ToolboxFactory {
-        public static List<Tool> getTools(CityMap city, ZoneManager zones) {
+        public static List<Tool> GetTools(CityMap city, ZoneManager zones) {
             var list = new List<Tool>();
 
             list.Add(new TileTool(new RectangeAreaSelector(), new PlaceZoneEffect(city, zones[0])));

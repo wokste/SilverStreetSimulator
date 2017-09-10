@@ -1,12 +1,11 @@
 ﻿using SFML.Audio;
-using System;
 using System.Collections.Generic;
 
 namespace CitySimulator
 {
     internal class SoundManager
     {
-        private Dictionary<string, Sound> _sounds = new Dictionary<string, Sound>();
+        private readonly Dictionary<string, Sound> _sounds = new Dictionary<string, Sound>();
 
         internal Sound GetSound(string fileName)
         {

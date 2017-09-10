@@ -1,10 +1,5 @@
 ﻿using SFML.Window;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CitySimulator.Tools {
     abstract class AreaSelector {
@@ -22,7 +17,7 @@ namespace CitySimulator.Tools {
             var change = true;
 
             while (change) {
-                if (filter(pos.X, pos.Y) == TileFilterResult.TERF_CanBuild) {
+                if (filter(pos.X, pos.Y) == TileFilterResult.CanBuild) {
                     action(pos.X, pos.Y);
                 }
 
@@ -83,7 +78,7 @@ namespace CitySimulator.Tools {
             
             for (var x = x0; x <= x1; x++) {
                 for (var y = y0; y <= y1; y++) {
-                    if (filter(x, y) == TileFilterResult.TERF_CanBuild) {
+                    if (filter(x, y) == TileFilterResult.CanBuild) {
                         action(x, y);
                     }
                 }

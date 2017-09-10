@@ -2,17 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CitySimulator.Desire {
-    class CityActor {
+    internal class CityActor {
 
         // TODO: This should be moved into zone, I believe. Also, there should be a list of buildings.
 
-        Random _rnd = new Random();
+        readonly Random _rnd = new Random();
         private string _name;
-        ZoneType _zone;
+        readonly ZoneType _zone;
 
         public CityActor(string name, ZoneType zone) {
             _name = name;
@@ -74,13 +72,13 @@ namespace CitySimulator.Desire {
             var list = new List<Vector2i>();
 
             foreach (var roadPos in roads) {
-                var X = roadPos.X;
-                var Y = roadPos.Y;
+                var rX = roadPos.X;
+                var rY = roadPos.Y;
 
-                var xMin = Math.Max(city.Terrain[X - 1, Y].IsRoad() ? X : X - 3, 0);
-                var xMax = Math.Min(city.Terrain[X + 1, Y].IsRoad() ? X : X + 3, city.Width - 1);
-                var yMin = Math.Max(city.Terrain[X, Y - 1].IsRoad() ? Y : Y - 3, 0);
-                var yMax = Math.Min(city.Terrain[X, Y + 1].IsRoad() ? Y : Y + 3, city.Height - 1);
+                var xMin = Math.Max(city.Terrain[rX - 1, rY].IsRoad() ? rX : rX - 3, 0);
+                var xMax = Math.Min(city.Terrain[rX + 1, rY].IsRoad() ? rX : rX + 3, city.Width - 1);
+                var yMin = Math.Max(city.Terrain[rX, rY - 1].IsRoad() ? rY : rY - 3, 0);
+                var yMax = Math.Min(city.Terrain[rX, rY + 1].IsRoad() ? rY : rY + 3, city.Height - 1);
                 
                 for (var x = xMin; x <= xMax; x++) {
                     for (var y = yMin; y <= yMax; y++) {

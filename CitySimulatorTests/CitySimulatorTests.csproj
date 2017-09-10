@@ -38,6 +38,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
     <Reference Include="sfmlnet-audio-2, Version=2.1.0.0, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\packages\SFML.Net.2.1.5\lib\sfmlnet-audio-2.dll</HintPath>
       <Private>True</Private>
@@ -75,6 +78,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Choose>
