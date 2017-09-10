@@ -37,10 +37,10 @@ namespace CitySimulator.Tools {
 
         private bool StepToX(ref Vector2i point, Vector2i to, bool recurse = true) {
             switch (point.X - to.X) {
-                case int n when n > 0:
+                case var n when n > 0:
                     point.X--;
                     return true;
-                case int n when n < 0:
+                case var n when n < 0:
                     point.X++;
                     return true;
                 default:
@@ -53,10 +53,10 @@ namespace CitySimulator.Tools {
 
         private bool StepToY(ref Vector2i point, Vector2i to, bool recurse = true) {
             switch (point.Y - to.Y) {
-                case int n when n > 0:
+                case var n when n > 0:
                     point.Y--;
                     return true;
-                case int n when n < 0:
+                case var n when n < 0:
                     point.Y++;
                     return true;
                 default:

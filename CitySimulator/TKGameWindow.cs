@@ -13,16 +13,16 @@ namespace CitySimulator {
         private Vector2f _lastMousePos;
 
         private Tool _tool;
-        private readonly List<Tool> toolbox;
+        private readonly List<Tool> _toolbox;
         private readonly Game _game;
 
         public TkGameWindow() : base(800, 600, GraphicsMode.Default, "Silver Street Simulator") {
             VSync = VSyncMode.On;
             
-            Random rnd = new Random();
+            var rnd = new Random();
             _game = new Game(rnd.Next());
             _renderer = new TkCityRenderer(_game.City);
-            toolbox = ToolboxFactory.GetTools(_game.City, _game.ZoneManager);
+            _toolbox = ToolboxFactory.GetTools(_game.City, _game.ZoneManager);
             
         }
 
@@ -41,7 +41,7 @@ namespace CitySimulator {
 
             GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
 
-            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width / (float)Height, 1.0f, 64.0f);
+            var projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width / (float)Height, 1.0f, 64.0f);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref projection);
         }
@@ -52,7 +52,7 @@ namespace CitySimulator {
             if (e.KeyChar >= '1' && e.KeyChar <= '9') {
                 var id = e.KeyChar - '1';
                 try {
-                    _tool = toolbox[id];
+                    _tool = _toolbox[id];
                 } catch (IndexOutOfRangeException) {
                     _tool = null;
                 }
@@ -90,14 +90,11 @@ namespace CitySimulator {
             */
         }
 
-        protected override void OnMouseWheel(OpenTK.Input.MouseWheelEventArgs e) {
+        protected override void OnMouseWheel(OpenTK.Input.MouseWheelEventArgs e)
+        {
             base.OnMouseWheel(e);
 
-            if (e.Delta > 0) {
-                Zoom(0.5f, new Vector2f(e.X, e.Y));
-            } else {
-                Zoom(2f, new Vector2f(e.X, e.Y));
-            }
+            Zoom(e.Delta > 0 ? 0.5f : 2f, new Vector2f(e.X, e.Y));
         }
 
         protected void Zoom(float f, Vector2f mousePos) {
@@ -112,7 +109,7 @@ namespace CitySimulator {
             base.OnUpdateFrame(e);
 
             _game.Update(1000 / 30);
-            this.Title = $"Silver Street Simulator - {_game.Money:C} +- {_game.Income:C}";
+            Title = $"Silver Street Simulator - {_game.Money:C} +- {_game.Income:C}";
         }
 
         protected override void OnRenderFrame(FrameEventArgs e) {
@@ -120,7 +117,7 @@ namespace CitySimulator {
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, Vector3.UnitY);
+            var modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, Vector3.UnitY);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelview);
 

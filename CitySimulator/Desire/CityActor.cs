@@ -58,7 +58,7 @@ namespace CitySimulator.Desire {
 
             for (var x = 0; x < city.Width; x++) {
                 for (var y = 0; y < city.Width; y++) {
-                    if (city.Terrain[x, y].IsRoad()) {
+                    if (city.IsRoad(x, y)) {
                         list.Add(new Vector2i(x, y));
                     }
                 }
@@ -75,10 +75,10 @@ namespace CitySimulator.Desire {
                 var rX = roadPos.X;
                 var rY = roadPos.Y;
 
-                var xMin = Math.Max(city.Terrain[rX - 1, rY].IsRoad() ? rX : rX - 3, 0);
-                var xMax = Math.Min(city.Terrain[rX + 1, rY].IsRoad() ? rX : rX + 3, city.Width - 1);
-                var yMin = Math.Max(city.Terrain[rX, rY - 1].IsRoad() ? rY : rY - 3, 0);
-                var yMax = Math.Min(city.Terrain[rX, rY + 1].IsRoad() ? rY : rY + 3, city.Height - 1);
+                var xMin = Math.Max(city.IsRoad(rX - 1, rY) ? rX : rX - 3, 0);
+                var xMax = Math.Min(city.IsRoad(rX + 1, rY) ? rX : rX + 3, city.Width - 1);
+                var yMin = Math.Max(city.IsRoad(rX, rY - 1) ? rY : rY - 3, 0);
+                var yMax = Math.Min(city.IsRoad(rX, rY + 1) ? rY : rY + 3, city.Height - 1);
                 
                 for (var x = xMin; x <= xMax; x++) {
                     for (var y = yMin; y <= yMax; y++) {

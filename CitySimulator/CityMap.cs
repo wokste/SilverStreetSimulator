@@ -45,15 +45,19 @@ namespace CitySimulator {
             Terrain[position.X, position.Y].Building = building;
             return true;
         }
+        
+        internal bool IsRoad(int x, int y) {
+            if (x < 0 || y < 0 || y >= Width || y >= Height) {
+                return false;
+            }
+
+            return Terrain[x, y].ZoneId == 4;
+        }
 
         internal struct Tile {
             internal int Terrain;
             internal int ZoneId;
             internal Building Building;
-
-            internal bool IsRoad() {
-                return ZoneId == 4;
-            }
         }
     }
 }

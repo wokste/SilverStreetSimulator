@@ -30,7 +30,7 @@ namespace CitySimulator.Tools {
                 return TileFilterResult.AlreadyExists;
 
             // Not placed on roads
-            if (_city.Terrain[x, y].IsRoad())
+            if (_city.IsRoad(x, y))
                 return TileFilterResult.NoBuild;
 
             return TileFilterResult.CanBuild;

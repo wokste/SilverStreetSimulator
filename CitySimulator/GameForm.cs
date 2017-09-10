@@ -12,7 +12,7 @@ namespace CitySimulator {
         private Vector2f _lastMousePos;
 
         private Tool _tool;
-        private readonly List<Tool> toolbox;
+        private readonly List<Tool> _toolbox;
         private readonly Game _game;
 
         internal GameForm() {
@@ -36,20 +36,20 @@ namespace CitySimulator {
             _window.MouseButtonReleased += OMouseButtonReleased;
             _window.KeyPressed += OnKeyPressed;
             
-            Random rnd = new Random();
+            var rnd = new Random();
 
             _game = new Game(rnd.Next());
 
             _renderer = new SfmlCityRenderer(_game.City);
 
-            toolbox = ToolboxFactory.GetTools(_game.City, _game.ZoneManager);
+            _toolbox = ToolboxFactory.GetTools(_game.City, _game.ZoneManager);
         }
 
         private void OnKeyPressed(object sender, KeyEventArgs e) {
             if (e.Code >= Keyboard.Key.Num1 && e.Code <= Keyboard.Key.Num9) {
                 var id = e.Code - Keyboard.Key.Num1;
                 try {
-                    _tool = toolbox[id];
+                    _tool = _toolbox[id];
                 } catch (IndexOutOfRangeException) {
                     _tool = null;
                 }
@@ -106,12 +106,9 @@ namespace CitySimulator {
             }
         }
 
-        private void OnMouseWheelMoved(object sender, MouseWheelEventArgs e) {
-            if (e.Delta > 0) {
-                Zoom(0.5f, new Vector2f(e.X,e.Y));
-            } else {
-                Zoom(2f, new Vector2f(e.X, e.Y));
-            }
+        private void OnMouseWheelMoved(object sender, MouseWheelEventArgs e)
+        {
+            Zoom(e.Delta > 0 ? 0.5f : 2f, new Vector2f(e.X, e.Y));
         }
 
         /// <summary>

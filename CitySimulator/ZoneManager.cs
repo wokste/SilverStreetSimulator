@@ -28,8 +28,7 @@ namespace CitySimulator {
 
         private void Load(XDocument doc) {
             var root = doc.Root;
-            
-            int id = 0;
+            var id = 0;
 
             if (root == null) {
                 throw new Exception("XML not well formatted. Root element missing.");
