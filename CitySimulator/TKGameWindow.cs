@@ -30,7 +30,10 @@ namespace CitySimulator {
             base.OnLoad(e);
             
             GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
-            GL.Enable(EnableCap.DepthTest);
+            //GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.Blend);
+            GL.Enable(EnableCap.Texture2D);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
         }
 
         protected override void OnResize(EventArgs e) {
@@ -121,15 +124,11 @@ namespace CitySimulator {
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelview);
 
+            var matrix = Matrix4.CreateOrthographic(Width, Height, 1.0f, 100.0f);
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadMatrix(ref matrix);
+
             _renderer.Draw();
-            
-            GL.Begin(PrimitiveType.Triangles);
-
-            GL.Color3(1.0f, 1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 4.0f);
-            GL.Color3(1.0f, 0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 4.0f);
-            GL.Color3(0.2f, 0.9f, 1.0f); GL.Vertex3(0.0f, 1.0f, 4.0f);
-
-            GL.End();
 
             SwapBuffers();
         }

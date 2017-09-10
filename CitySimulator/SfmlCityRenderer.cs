@@ -1,7 +1,6 @@
 ﻿using System;
 using SFML.Graphics;
 using SFML.Window;
-using Image = SFML.Graphics.Image;
 
 namespace CitySimulator {
     class SfmlCityRenderer : Drawable {
@@ -20,7 +19,7 @@ namespace CitySimulator {
 
         private Sprite MakeSprite(string texName) {
             var image = new Image($"{Program.AssetsFolder}{texName}");
-            var texture = new Texture(image);
+            var texture = new SFML.Graphics.Texture(image);
             return new Sprite {
                 Texture = texture
             };

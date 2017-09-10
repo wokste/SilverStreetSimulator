@@ -1,6 +1,5 @@
 ﻿using System;
 using SFML.Window;
-using Image = SFML.Graphics.Image;
 using SFML.Graphics;
 
 namespace CitySimulator {
@@ -8,22 +7,14 @@ namespace CitySimulator {
         private readonly CityMap _cityMap;
         public IsometricView View = new IsometricView();
 
-        //private readonly Sprite _tileSetSprite;
-        //private readonly Sprite _buildingSprite;
+        private readonly Texture _tileSetSprite;
+        private readonly Texture _buildingSprite;
 
         public TkCityRenderer(CityMap cityMap) {
             _cityMap = cityMap;
 
-            //_tileSetSprite = MakeSprite("TilesetIso.png");
-            //_buildingSprite = MakeSprite("buildings1x1.png");
-        }
-
-        private Sprite MakeSprite(string texName) {
-            var image = new Image($"{Program.AssetsFolder}{texName}");
-            var texture = new Texture(image);
-            return new Sprite {
-                Texture = texture
-            };
+            _tileSetSprite = new Texture("TilesetIso.png");
+            _buildingSprite = new Texture("buildings1x1.png");
         }
 
         public void Draw() {
@@ -34,27 +25,21 @@ namespace CitySimulator {
         private void DrawTerrainIso() {
             var area = GetRenderArea();
 
-            //_tileSetSprite.Scale = new Vector2f(1 / View.Zoom, 1 / View.Zoom);
-
             for (var x = area.Left; x < area.Left + area.Width; x++) {
                 for (var y = area.Top; y < area.Top + area.Height; y++) {
                     var vec2D = new Vector2i(x, y);
                     var vecIso = View.WensToScreenPx(vec2D);
 
-                    //_tileSetSprite.Position = vecIso;
-
                     var tileId = _cityMap.Terrain[x, y].Terrain;
-                    //_tileSetSprite.TextureRect = new IntRect((tileId % 2) * 64, (tileId / 2) * 32, 64, 32);
+                    var textureRect = new IntRect((tileId % 2) * 64, (tileId / 2) * 32, 64, 32);
 
-                    //target.Draw(_tileSetSprite);
+                    _tileSetSprite.Render2D(vecIso, textureRect, new Vector2f(1 / View.Zoom, 1 / View.Zoom));
                 }
             }
         }
 
         private void DrawBuildingsIso() {
             var area = GetRenderArea();
-
-            //_buildingSprite.Scale = new Vector2f(1 / View.Zoom, 1 / View.Zoom);
 
             for (var x = area.Left; x < area.Left + area.Width; x++) {
                 for (var y = area.Top; y < area.Top + area.Height; y++) {
@@ -67,16 +52,14 @@ namespace CitySimulator {
                     var vecWorld = View.WensToWorldPx(vecWens, building.Type.TextureRect);
                     var vecScreen = View.WorldPxToScreenPx(vecWorld);
 
-                    //_buildingSprite.Position = vecScreen;
-
-                    //_buildingSprite.TextureRect = building.Type.TextureRect;
-
-                    //target.Draw(_buildingSprite);
+                    _buildingSprite.Render2D(vecScreen, building.Type.TextureRect, new Vector2f(1 / View.Zoom, 1 / View.Zoom));
                 }
             }
         }
 
         private IntRect GetRenderArea() {
+            return new IntRect(0,0, _cityMap.Width, _cityMap.Height);
+
             var screenX = 1024;// ScreenSize.X;
             var screenY = 768;// ScreenSize.Y;
 
