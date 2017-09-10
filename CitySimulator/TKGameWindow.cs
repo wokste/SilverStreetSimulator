@@ -80,14 +80,14 @@ namespace CitySimulator {
 
             var mouseDrag = _lastMousePos - new Vector2f(e.X, e.Y);
             _lastMousePos = new Vector2f(e.X, e.Y);
-            /*
-            if (Mouse.IsButtonPressed(MouseButton.Right)) {
+
+            var mouse = Mouse.GetState();
+            if (mouse[MouseButton.Right]) {
                 _renderer.View.TopLeftPos += (mouseDrag * _renderer.View.Zoom);
             }
-            if (Mouse.IsButtonPressed(MouseButton.Left)) {
-                _tool.MouseDrag(_game, _renderer.View, new Vector2f(e.X, e.Y));
+            if (mouse[MouseButton.Left]) {
+                _tool?.MouseDrag(_game, _renderer.View, new Vector2f(e.X, e.Y));
             }
-            */
         }
 
         protected override void OnMouseWheel(OpenTK.Input.MouseWheelEventArgs e)
@@ -98,11 +98,11 @@ namespace CitySimulator {
         }
 
         protected void Zoom(float f, Vector2f mousePos) {
-            var mousePosWorld = _renderer.View.ScreenPxToWorldPx(mousePos);
+            //var mousePosWorld = _renderer.View.ScreenPxToWorldPx(mousePos);
             _renderer.View.Zoom *= f;
-            var mousePosNew = _renderer.View.WorldPxToScreenPx(mousePosWorld);
+            //var mousePosNew = _renderer.View.WorldPxToScreenPx(mousePosWorld);
 
-            _renderer.View.TopLeftPos += (mousePosNew - mousePos);
+            //_renderer.View.TopLeftPos += (mousePosNew - mousePos);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e) {
@@ -117,7 +117,7 @@ namespace CitySimulator {
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            var modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, Vector3.UnitY);
+            var modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, -Vector3.UnitY);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelview);
 
