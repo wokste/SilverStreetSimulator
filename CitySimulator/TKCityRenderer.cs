@@ -34,7 +34,7 @@ namespace CitySimulator {
             }
 
             void TexCoord2(int tileId, float dx, float dy) {
-                var tex = new Vector2((tileId % 2 + dx) * 0.5f, (1 - tileId / 2 + dy) * 0.5f);
+                var tex = new Vector2((tileId % 2 + dx) * 0.5f, (tileId / 2 + dy) * 0.5f);
                 GL.TexCoord2(tex);
             }
 
@@ -42,6 +42,10 @@ namespace CitySimulator {
                 for (var y = area.Top; y < area.Top + area.Height; y++)
                 {
                     var tileId = _cityMap.Terrain[x, y].Terrain;
+
+                    if (_cityMap.IsRoad(x, y))
+                        tileId = 3;
+
                     TexCoord2(tileId, 0, 0);
                     Vertex3(x, y, 0);
                     TexCoord2(tileId, 1, 0);

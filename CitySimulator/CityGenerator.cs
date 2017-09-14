@@ -33,13 +33,11 @@ namespace CitySimulator {
                     var vegitation = vegitationMap.Get(x, y);
 
                     if (height < -0.5f) {
-                        cityMap.Terrain[x, y].Terrain = 2;
-                    } else if (vegitation < -0.5f) {
-                        cityMap.Terrain[x, y].Terrain = 1;
-                    } else if (vegitation > 0.5f) {
-                        cityMap.Terrain[x, y].Terrain = 3;
-                    } else {
                         cityMap.Terrain[x, y].Terrain = 0;
+                    }
+                    else
+                    {
+                        cityMap.Terrain[x, y].Terrain = (vegitation > 0.5f) ? 1 : 2;
                     }
                 }
             }
