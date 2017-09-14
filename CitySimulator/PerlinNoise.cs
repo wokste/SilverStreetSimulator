@@ -25,7 +25,7 @@ namespace CitySimulator {
         /// <param name="a1">The return value if w = 1</param>
         /// <param name="w">Weight. Should be in the range [0.0, 1.0]</param>
         /// <returns>The interpolation value</returns>
-        float lerp(float a0, float a1, float w) {
+        float Lerp(float a0, float a1, float w) {
             return (1.0f - w) * a0 + w * a1;
         }
         
@@ -41,10 +41,10 @@ namespace CitySimulator {
             var v3 = NoiseSmooth(xInt, yInt + 1);
             var v4 = NoiseSmooth(xInt + 1, yInt + 1);
 
-            var i1 = lerp(v1, v2, xFrac);
-            var i2 = lerp(v3, v4, xFrac);
+            var i1 = Lerp(v1, v2, xFrac);
+            var i2 = Lerp(v3, v4, xFrac);
 
-            return lerp(i1, i2, yFrac);
+            return Lerp(i1, i2, yFrac);
         }
 
         internal float Get(float x, float y) {

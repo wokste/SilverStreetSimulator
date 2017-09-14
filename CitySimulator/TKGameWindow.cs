@@ -5,16 +5,17 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using CitySimulator.Tools;
 using System.Collections.Generic;
-using SFML.Window;
+using System.Drawing;
 
 namespace CitySimulator {
     class TkGameWindow : GameWindow {
         private readonly TkCityRenderer _renderer;
-        private Vector2f _lastMousePos;
+        private Vector3 _lastMousePos3D;
 
         private Tool _tool;
         private readonly List<Tool> _toolbox;
         private readonly Game _game;
+        private readonly Camera _camera = new Camera();
 
         public TkGameWindow() : base(800, 600, GraphicsMode.Default, "Silver Street Simulator") {
             VSync = VSyncMode.On;
@@ -39,11 +40,9 @@ namespace CitySimulator {
         protected override void OnResize(EventArgs e) {
             base.OnResize(e);
 
-            GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
 
-            var projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width / (float)Height, 1.0f, 64.0f);
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadMatrix(ref projection);
+            _camera.ScreenSize = new Size(ClientRectangle.Width, ClientRectangle.Height);
+            GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
         }
 
         protected override void OnKeyPress(KeyPressEventArgs e) {
@@ -63,7 +62,7 @@ namespace CitySimulator {
             base.OnMouseDown(e);
 
             if (e.Button == MouseButton.Left) {
-                _tool?.MouseDown(_game, _renderer.View, new Vector2f(e.X, e.Y));
+                //_tool?.MouseDown(_game, _renderer.View, new Vector2f(e.X, e.Y));
             }
         }
 
@@ -71,22 +70,24 @@ namespace CitySimulator {
             base.OnMouseUp(e);
 
             if (e.Button == MouseButton.Left) {
-                _tool?.MouseUp(_game, _renderer.View, new Vector2f(e.X, e.Y));
+                //_tool?.MouseUp(_game, _renderer.View, new Vector2f(e.X, e.Y));
             }
         }
 
         protected override void OnMouseMove(OpenTK.Input.MouseMoveEventArgs e) {
             base.OnMouseMove(e);
 
-            var mouseDrag = _lastMousePos - new Vector2f(e.X, e.Y);
-            _lastMousePos = new Vector2f(e.X, e.Y);
+            var mousePos3D = _camera.ScreenSpaceToWorldSpace(e.Position);
 
+            var mouseDrag = _lastMousePos3D - mousePos3D;
+            _lastMousePos3D = mousePos3D;
+            
             var mouse = Mouse.GetState();
             if (mouse[MouseButton.Right]) {
-                _renderer.View.TopLeftPos += (mouseDrag * _renderer.View.Zoom);
+                _camera.MoveFocus(mouseDrag);
             }
             if (mouse[MouseButton.Left]) {
-                _tool?.MouseDrag(_game, _renderer.View, new Vector2f(e.X, e.Y));
+                //_tool?.MouseMoved(_game, _renderer.View, new Vector2f(e.X, e.Y));
             }
         }
 
@@ -94,22 +95,15 @@ namespace CitySimulator {
         {
             base.OnMouseWheel(e);
 
-            Zoom(e.Delta > 0 ? 0.5f : 2f, new Vector2f(e.X, e.Y));
+            var zoom = e.Delta > 0 ? 0.5f : 2f;
+            _camera.Zoom *= zoom;
         }
-
-        protected void Zoom(float f, Vector2f mousePos) {
-            //var mousePosWorld = _renderer.View.ScreenPxToWorldPx(mousePos);
-            _renderer.View.Zoom *= f;
-            //var mousePosNew = _renderer.View.WorldPxToScreenPx(mousePosWorld);
-
-            //_renderer.View.TopLeftPos += (mousePosNew - mousePos);
-        }
-
+        
         protected override void OnUpdateFrame(FrameEventArgs e) {
             base.OnUpdateFrame(e);
 
             _game.Update(1000 / 30);
-            Title = $"Silver Street Simulator - {_game.Money:C} +- {_game.Income:C}";
+            //Title = $"Silver Street Simulator - {_game.Money:C} +- {_game.Income:C}";
         }
 
         protected override void OnRenderFrame(FrameEventArgs e) {
@@ -117,13 +111,7 @@ namespace CitySimulator {
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            var modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, -Vector3.UnitY);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref modelview);
-
-            var matrix = Matrix4.CreateOrthographic(Width, Height, 1.0f, 100.0f);
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadMatrix(ref matrix);
+            _camera.SetMatrices();
 
             _renderer.Draw();
 

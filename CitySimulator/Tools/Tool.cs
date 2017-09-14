@@ -45,7 +45,7 @@ namespace CitySimulator.Tools{
         /// <param name="game">The game</param>
         /// <param name="view">The isometric view for converting screen positions in other positions.</param>
         /// <param name="screenPos">The screen position in pixels.</param>
-        public void MouseDrag(Game game, IsometricView view, Vector2f screenPos)
+        public void MouseMoved(Game game, IsometricView view, Vector2f screenPos)
         {
             if (!_mousePressed)
                 return;
