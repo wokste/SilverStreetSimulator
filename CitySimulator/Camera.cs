@@ -1,6 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using OpenTK;
+﻿using OpenTK;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 

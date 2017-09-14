@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
-using SFML.Graphics;
-using SFML.Window;
 
 namespace CitySimulator {
     class ZoneType {
@@ -31,7 +30,7 @@ namespace CitySimulator {
 
             foreach (var buildingGroupElem in zoneXmlElem.Elements()) {
                 var sizeArray = buildingGroupElem.Attribute("size").Value.Split('x').Select(int.Parse).ToArray();
-                var size = new Vector2i(sizeArray[0], sizeArray[1]);
+                var size = new Size(sizeArray[0], sizeArray[1]);
 
                 var population = buildingGroupElem.GetInt("population",true);
                 var jobs = buildingGroupElem.GetInt("jobs", true);
@@ -44,7 +43,7 @@ namespace CitySimulator {
 
                     var b = new BuildingType {
                         Size = size,
-                        TextureRect = new IntRect(left,top,width,height),
+                        TextureRect = new Rectangle(left,top,width,height),
                         Population = population,
                         Jobs = jobs
                     };

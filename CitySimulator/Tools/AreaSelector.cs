@@ -1,11 +1,11 @@
-﻿using SFML.Window;
-using System;
+﻿using System;
+using System.Drawing;
 
 namespace CitySimulator.Tools {
     abstract class AreaSelector {
 
-        public Vector2i Start { get; set; }
-        public Vector2i End { get; set; }
+        public Point Start { get; set; }
+        public Point End { get; set; }
 
         public abstract void Iterate(Action<int, int> action, Func<int, int, TileFilterResult> filter);
     }
@@ -25,8 +25,8 @@ namespace CitySimulator.Tools {
             }
         }
 
-        private bool StepTo(ref Vector2i point, Vector2i to) {
-            var diff = point - to;
+        private bool StepTo(ref Point point, Point to) {
+            var diff = point.Substract(to);
 
             if (Math.Abs(diff.X) > Math.Abs(diff.Y)) {
                 return StepToX(ref point, to);
@@ -35,7 +35,7 @@ namespace CitySimulator.Tools {
             }
         }
 
-        private bool StepToX(ref Vector2i point, Vector2i to, bool recurse = true) {
+        private bool StepToX(ref Point point, Point to, bool recurse = true) {
             switch (point.X - to.X) {
                 case var n when n > 0:
                     point.X--;
@@ -51,7 +51,7 @@ namespace CitySimulator.Tools {
             }
         }
 
-        private bool StepToY(ref Vector2i point, Vector2i to, bool recurse = true) {
+        private bool StepToY(ref Point point, Point to, bool recurse = true) {
             switch (point.Y - to.Y) {
                 case var n when n > 0:
                     point.Y--;

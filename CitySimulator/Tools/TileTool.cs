@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using SFML.Window;
+using OpenTK;
 
 namespace CitySimulator.Tools {
     class TileTool : Tool {
@@ -11,18 +11,18 @@ namespace CitySimulator.Tools {
             _effect = effect;
         }
 
-        protected override void OnMouseDown(Game game, IsometricView view, Vector2f screenPos)
+        protected override void OnMouseDown(Game game, Vector3 screenPos)
         {
-            _area.Start = view.ScreenPxToWens(screenPos);
+            _area.Start = screenPos.Xy.Floor();
         }
         
-        protected override void OnMouseDrag(Game game, IsometricView view, Vector2f screenPos) {
-            _area.End = view.ScreenPxToWens(screenPos);
+        protected override void OnMouseDrag(Game game, Vector3 screenPos) {
+            _area.End = screenPos.Xy.Floor();
         }
 
-        protected override void OnMouseUp(Game game, IsometricView view, Vector2f screenPos)
+        protected override void OnMouseUp(Game game, Vector3 screenPos)
         {
-            _area.End = view.ScreenPxToWens(screenPos);
+            _area.End = screenPos.Xy.Floor();
 
             var cost = CalculateCost();
 

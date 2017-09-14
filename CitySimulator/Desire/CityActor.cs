@@ -1,6 +1,6 @@
-﻿using SFML.Window;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace CitySimulator.Desire {
@@ -51,25 +51,25 @@ namespace CitySimulator.Desire {
             }
         }
 
-        private IList<Vector2i> FindRoadNetwork(CityMap city) {
+        private IList<Point> FindRoadNetwork(CityMap city) {
 
             // TODO: This function has an O(n^2) computation power which is likely too slow. Some kind of caching might be useful.
-            var list = new List<Vector2i>();
+            var list = new List<Point>();
 
             for (var x = 0; x < city.Width; x++) {
                 for (var y = 0; y < city.Width; y++) {
                     if (city.IsRoad(x, y)) {
-                        list.Add(new Vector2i(x, y));
+                        list.Add(new Point(x, y));
                     }
                 }
             }
             return list;
         }
 
-        private IList<Vector2i> FindOpenPositions(IList<Vector2i> roads, CityMap city) {
+        private IList<Point> FindOpenPositions(IList<Point> roads, CityMap city) {
 
             // TODO: This function has an O(n^2) computation power which is likely too slow. Some kind of caching might be useful.
-            var list = new List<Vector2i>();
+            var list = new List<Point>();
 
             foreach (var roadPos in roads) {
                 var rX = roadPos.X;
@@ -83,7 +83,7 @@ namespace CitySimulator.Desire {
                 for (var x = xMin; x <= xMax; x++) {
                     for (var y = yMin; y <= yMax; y++) {
                         if (city.Terrain[x, y].ZoneId == _zone.Id && city.Terrain[x, y].Building == null) {
-                            list.Add(new Vector2i(x, y));
+                            list.Add(new Point(x, y));
                         }
                     }
                 }

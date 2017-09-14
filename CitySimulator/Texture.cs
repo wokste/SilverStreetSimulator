@@ -31,7 +31,7 @@ namespace CitySimulator {
         }
 
 
-        public void Render2D(SFML.Window.Vector2f vecIso, SFML.Graphics.IntRect textureRect, SFML.Window.Vector2f scale)
+        public void Render2D(Point vecIso, Rectangle textureRect, Vector2 scale)
         {
             var v0 = new Vector3(vecIso.X, vecIso.Y, 3.0f);
             var vHor = Vector3.UnitX * textureRect.Width * scale.X;

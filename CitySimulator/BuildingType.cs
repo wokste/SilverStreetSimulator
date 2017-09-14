@@ -1,12 +1,11 @@
-﻿using SFML.Graphics;
-using SFML.Window;
+﻿using System.Drawing;
 
 namespace CitySimulator {
     class BuildingType {
         internal int Jobs;
         internal int Population;
-        internal Vector2i Size = new Vector2i(2,2);
+        internal Size Size = new Size(2,2);
 
-        internal IntRect TextureRect;
+        internal Rectangle TextureRect;
     }
 }

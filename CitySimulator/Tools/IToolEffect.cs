@@ -1,5 +1,5 @@
-﻿using SFML.Window;
-using System;
+﻿using System;
+using System.Drawing;
 
 namespace CitySimulator.Tools {
     interface IToolEffect {
@@ -22,7 +22,7 @@ namespace CitySimulator.Tools {
 
         public TileFilterResult Filter(int x, int y) {
             // Only build inside map.
-            if (!_city.IsFreeArea(new Vector2i(x, y)))
+            if (!_city.IsFreeArea(new Point(x, y)))
                 return TileFilterResult.NoBuild;
 
             // Don't build where there is already the same zone. Would increase cost.
@@ -56,7 +56,7 @@ namespace CitySimulator.Tools {
 
         public TileFilterResult Filter(int x, int y) {
             // Don't build outside map
-            if (!_city.IsFreeArea(new Vector2i(x, y)))
+            if (!_city.IsFreeArea(new Point(x, y)))
                 return TileFilterResult.NoBuild;
             
             // Don't build where there is already a road.
@@ -87,7 +87,7 @@ namespace CitySimulator.Tools {
         }
 
         public TileFilterResult Filter(int x, int y) {
-            if (!_city.IsFreeArea(new Vector2i(x, y)))
+            if (!_city.IsFreeArea(new Point(x, y)))
                 return TileFilterResult.NoBuild;
 
             // Don't destroy empty tiles

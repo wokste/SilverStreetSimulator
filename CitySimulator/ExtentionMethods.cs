@@ -1,15 +1,21 @@
 ﻿using System;
+using System.Drawing;
 using System.Xml.Linq;
-using SFML.Window;
+using OpenTK;
 
 namespace CitySimulator {
     static class ExtentionMethods {
-        internal static Vector2f ToVector2F(this Vector2i i) {
-            return new Vector2f(i.X, i.Y);
+        internal static Point Floor(this Vector2 v) {
+            return new Point((int)Math.Floor(v.X), (int)Math.Floor(v.Y));
         }
 
-        internal static Vector2f ToVector2F(this Vector2u u) {
-            return new Vector2f(u.X, u.Y);
+        internal static Point Round(this Vector2 v) {
+            return new Point((int)Math.Round(v.X), (int)Math.Round(v.Y));
+        }
+
+        internal static Point Substract(this Point left, Point right)
+        {
+            return new Point(left.X - right.X, left.Y - right.Y);
         }
 
         internal static string GetString(this XElement elem, string name, bool useDefault = false) {

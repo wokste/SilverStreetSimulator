@@ -1,4 +1,4 @@
-﻿using SFML.Window;
+﻿using System.Drawing;
 
 namespace CitySimulator {
     class CityMap {
@@ -20,7 +20,7 @@ namespace CitySimulator {
             }
         }
 
-        internal bool IsFreeArea(Vector2i pos) {
+        internal bool IsFreeArea(Point pos) {
             if (pos.X < 0 || pos.Y < 0 || pos.X >= Width || pos.Y >= Height) {
                 return false;
             }
@@ -33,7 +33,7 @@ namespace CitySimulator {
             return true;
         }
 
-        internal bool PlaceBuilding(Vector2i position, BuildingType type) {
+        internal bool PlaceBuilding(Point position, BuildingType type) {
             if (!IsFreeArea(position)) {
                 //return false;
             }

@@ -61,16 +61,20 @@ namespace CitySimulator {
         protected override void OnMouseDown(OpenTK.Input.MouseButtonEventArgs e) {
             base.OnMouseDown(e);
 
+            var mousePos3D = _camera.ScreenSpaceToWorldSpace(e.Position);
+
             if (e.Button == MouseButton.Left) {
-                //_tool?.MouseDown(_game, _renderer.View, new Vector2f(e.X, e.Y));
+                _tool?.MouseDown(_game, mousePos3D);
             }
         }
 
         protected override void OnMouseUp(OpenTK.Input.MouseButtonEventArgs e) {
             base.OnMouseUp(e);
 
+            var mousePos3D = _camera.ScreenSpaceToWorldSpace(e.Position);
+
             if (e.Button == MouseButton.Left) {
-                //_tool?.MouseUp(_game, _renderer.View, new Vector2f(e.X, e.Y));
+                _tool?.MouseUp(_game, mousePos3D);
             }
         }
 
@@ -87,7 +91,7 @@ namespace CitySimulator {
                 _camera.MoveFocus(mouseDrag);
             }
             if (mouse[MouseButton.Left]) {
-                //_tool?.MouseMoved(_game, _renderer.View, new Vector2f(e.X, e.Y));
+                _tool?.MouseMoved(_game, mousePos3D);
             }
         }
 
@@ -103,7 +107,7 @@ namespace CitySimulator {
             base.OnUpdateFrame(e);
 
             _game.Update(1000 / 30);
-            //Title = $"Silver Street Simulator - {_game.Money:C} +- {_game.Income:C}";
+            Title = $"Silver Street Simulator - {_game.Money:C} +- {_game.Income:C}";
         }
 
         protected override void OnRenderFrame(FrameEventArgs e) {
