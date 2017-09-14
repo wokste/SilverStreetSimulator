@@ -98,9 +98,12 @@ namespace CitySimulator {
         protected override void OnMouseWheel(OpenTK.Input.MouseWheelEventArgs e)
         {
             base.OnMouseWheel(e);
-
-            var zoom = e.Delta > 0 ? 0.5f : 2f;
-            _camera.Zoom *= zoom;
+            
+            var zoom = 1.03f;
+            if (e.Delta > 0)
+                _camera.Zoom *= zoom;
+            else
+                _camera.Zoom /= zoom;
         }
         
         protected override void OnUpdateFrame(FrameEventArgs e) {
