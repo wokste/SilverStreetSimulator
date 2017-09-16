@@ -26,7 +26,7 @@ namespace CitySimulator {
             }
             
             var tile = Terrain[pos.X, pos.Y];
-            if (tile.Terrain == 2) {
+            if (tile.Terrain == 0) {
                 return false;
             }
             

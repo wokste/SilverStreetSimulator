@@ -10,12 +10,14 @@ using System.Drawing;
 namespace CitySimulator {
     class TkGameWindow : GameWindow {
         private readonly TkCityRenderer _renderer;
-        private Vector3 _lastMousePos3D;
 
-        private Tool _tool;
+        private Tool _toolLeft;
+        private readonly Tool _toolRight = new PaddingTool();
         private readonly List<Tool> _toolbox;
         private readonly Game _game;
         private readonly Camera _camera = new Camera();
+
+        private Point MOUSE_POS_TEMP;
 
         public TkGameWindow() : base(800, 600, GraphicsMode.Default, "Silver Street Simulator") {
             VSync = VSyncMode.On;
@@ -51,51 +53,50 @@ namespace CitySimulator {
             if (e.KeyChar >= '1' && e.KeyChar <= '9') {
                 var id = e.KeyChar - '1';
                 try {
-                    _tool = _toolbox[id];
+                    _toolLeft = _toolbox[id];
                 } catch (IndexOutOfRangeException) {
-                    _tool = null;
+                    _toolLeft = null;
                 }
             }
         }
 
-        protected override void OnMouseDown(OpenTK.Input.MouseButtonEventArgs e) {
+        protected override void OnMouseDown(MouseButtonEventArgs e) {
             base.OnMouseDown(e);
 
-            var mousePos3D = _camera.ScreenSpaceToWorldSpace(e.Position);
-
             if (e.Button == MouseButton.Left) {
-                _tool?.MouseDown(_game, mousePos3D);
+                _toolLeft?.MouseDown(_game, _camera, e.Position);
+            }
+            if (e.Button == MouseButton.Right) {
+                _toolRight?.MouseDown(_game, _camera, e.Position);
             }
         }
 
-        protected override void OnMouseUp(OpenTK.Input.MouseButtonEventArgs e) {
+        protected override void OnMouseUp(MouseButtonEventArgs e) {
             base.OnMouseUp(e);
 
-            var mousePos3D = _camera.ScreenSpaceToWorldSpace(e.Position);
-
             if (e.Button == MouseButton.Left) {
-                _tool?.MouseUp(_game, mousePos3D);
+                _toolLeft?.MouseUp(_game, _camera, e.Position);
+            }
+            if (e.Button == MouseButton.Right) {
+                _toolRight?.MouseUp(_game, _camera, e.Position);
             }
         }
 
-        protected override void OnMouseMove(OpenTK.Input.MouseMoveEventArgs e) {
+        protected override void OnMouseMove(MouseMoveEventArgs e) {
             base.OnMouseMove(e);
 
-            var mousePos3D = _camera.ScreenSpaceToWorldSpace(e.Position);
+            MOUSE_POS_TEMP = e.Position;
 
-            var mouseDrag = _lastMousePos3D - mousePos3D;
-            _lastMousePos3D = mousePos3D;
-            
             var mouse = Mouse.GetState();
-            if (mouse[MouseButton.Right]) {
-                _camera.MoveFocus(mouseDrag);
-            }
             if (mouse[MouseButton.Left]) {
-                _tool?.MouseMoved(_game, mousePos3D);
+                _toolLeft?.MouseMoved(_game, _camera, e.Position);
+            }
+            if (mouse[MouseButton.Right]) {
+                _toolRight?.MouseMoved(_game, _camera, e.Position);
             }
         }
 
-        protected override void OnMouseWheel(OpenTK.Input.MouseWheelEventArgs e)
+        protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
             base.OnMouseWheel(e);
             
@@ -110,7 +111,7 @@ namespace CitySimulator {
             base.OnUpdateFrame(e);
 
             _game.Update(1000 / 30);
-            Title = $"Silver Street Simulator - {_game.Money:C} +- {_game.Income:C}";
+            //Title = $"Silver Street Simulator - {_game.Money:C} +- {_game.Income:C}";
         }
 
         protected override void OnRenderFrame(FrameEventArgs e) {
@@ -121,8 +122,32 @@ namespace CitySimulator {
             _camera.SetMatrices();
 
             _renderer.Draw();
+            renderMouse();
 
             SwapBuffers();
         }
+        
+        private void renderMouse()
+        {
+            var mouse = Mouse.GetState();
+            var mousePos = new Point(mouse.X, mouse.Y);
+            Title = $"{mousePos} {MOUSE_POS_TEMP}";
+            var pos3D = _camera.ScreenSpaceToWorldSpace(MOUSE_POS_TEMP, null, true);
+
+            GL.Disable(EnableCap.Texture2D);
+            
+            GL.Begin(PrimitiveType.Triangles);
+
+            for (var i = 0; i < 3; i++)
+            {
+                var vec = new Vector3((float)Math.Sin(i * 0.6667 * Math.PI) * 0.5f, (float)Math.Cos(i * 0.6667 * Math.PI) * 0.5f, 0.1f);
+                GL.Vertex3(vec + pos3D);
+            }
+
+            GL.End();
+
+            GL.Enable(EnableCap.Texture2D);
+        }
+        
     }
 }

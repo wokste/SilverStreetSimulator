@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using System;
+using OpenTK;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 
@@ -6,8 +7,8 @@ namespace CitySimulator {
     class Camera {
         private Vector3 _focus = new Vector3(0, 0, 0);
         private Vector3 _dir = new Vector3(-1, -1, -0.70710678118f);
-        private float pitch = 45;//(float)(Math.PI / 4);
-        private float yaw = 45;//(float)(Math.PI / 4);
+        private float rotZ = (float)(Math.PI / 4) * -1f;
+        private float rotX = 0.7654f;//1.3f;
 
         internal float Zoom = 32;
 
@@ -17,9 +18,13 @@ namespace CitySimulator {
         {
             get
             {
-                var dirQuad = Quaternion.FromEulerAngles(pitch, yaw, 0);
-                var dir = dirQuad * Vector3.UnitZ;
-                var modelView = Matrix4.LookAt(_focus - _dir, _focus, Vector3.UnitZ);
+                var quatZ = Quaternion.FromAxisAngle(Vector3.UnitZ, rotZ);
+                var quatX = Quaternion.FromAxisAngle(Vector3.UnitX, rotX);
+                var dir = quatZ * quatX * Vector3.UnitY;
+
+                Console.WriteLine($"Dir: {dir} should be {_dir}");
+
+                var modelView = Matrix4.LookAt(_focus - dir, _focus, Vector3.UnitZ);
                 return modelView;
             }
         }
@@ -40,17 +45,22 @@ namespace CitySimulator {
             _focus += mouseDrag3D;
         }
 
-        internal void MoveRotate(Vector2 rotation) {
-
+        internal void MoveRotate(Vector2 rotation)
+        {
+            //rotX = MathHelper.Clamp(rotX + rotation.X, 0.3f, 1.3f); 
+            rotZ = rotZ + rotation.Y;
         }
-
-        internal Vector3 ScreenSpaceToWorldSpace(Point screenSpace)
+        
+        internal Vector3 ScreenSpaceToWorldSpace(Point screenSpace, object heightMap, bool translate)
         {
             screenSpace.X -= ScreenSize.Width / 2;
             screenSpace.Y -= ScreenSize.Height / 2;
 
             // Determine line l = a + lambda b which represents the screen coordinate in 3D
-            var a4 = new Vector4(screenSpace.X / Zoom, -screenSpace.Y / Zoom, 0, 0) * ModelView.Inverted();
+            var screenSpace4D = new Vector4(screenSpace.X / Zoom, -screenSpace.Y / Zoom, 0, (translate) ? 1 : 0 );
+            var modelViewInverted = ModelView.Inverted();
+
+            var a4 = screenSpace4D * modelViewInverted;//new Vector4(screenSpace.X / Zoom, -screenSpace.Y / Zoom, 0, 0) * ModelView.Inverted();
             var a = a4.Xyz;
             var b = _dir;
 
@@ -63,6 +73,5 @@ namespace CitySimulator {
 
             return point;
         }
-
     }
 }

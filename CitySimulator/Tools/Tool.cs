@@ -1,4 +1,4 @@
-﻿using OpenTK;
+﻿using System.Drawing;
 
 namespace CitySimulator.Tools{
     abstract class Tool
@@ -11,16 +11,17 @@ namespace CitySimulator.Tools{
         /// <param name="game">The game</param>
         /// <param name="view">The isometric view for converting screen positions in other positions.</param>
         /// <param name="screenPos">The screen position in pixels.</param>
-        public void MouseDown(Game game, Vector3 screenPos)
+        public void MouseDown(Game game, Camera camera, Point screenPos)
         {
             if (_mousePressed)
                 return;
 
             _mousePressed = true;
 
-            OnMouseDown(game, screenPos);
+            OnMouseDown(game, camera, screenPos);
+            OnMouseDrag(game, camera, screenPos);
         }
-        protected abstract void OnMouseDown(Game game, Vector3 screenPos);
+        protected abstract void OnMouseDown(Game game, Camera camera, Point screenPos);
 
         /// <summary>
         /// Called when the mouse is released while the tool is active
@@ -28,16 +29,17 @@ namespace CitySimulator.Tools{
         /// <param name="game">The game</param>
         /// <param name="view">The isometric view for converting screen positions in other positions.</param>
         /// <param name="screenPos">The screen position in pixels.</param>
-        public void MouseUp(Game game, Vector3 screenPos)
+        public void MouseUp(Game game, Camera camera, Point screenPos)
         {
             if (!_mousePressed)
                 return;
 
             _mousePressed = false;
 
-            OnMouseUp(game, screenPos);
+            OnMouseDrag(game, camera, screenPos);
+            OnMouseUp(game, camera, screenPos);
         }
-        protected abstract void OnMouseUp(Game game, Vector3 screenPos);
+        protected abstract void OnMouseUp(Game game, Camera camera, Point screenPos);
 
         /// <summary>
         /// Called when the mouse is dragged while the tool is active
@@ -45,13 +47,13 @@ namespace CitySimulator.Tools{
         /// <param name="game">The game</param>
         /// <param name="view">The isometric view for converting screen positions in other positions.</param>
         /// <param name="screenPos">The screen position in pixels.</param>
-        public void MouseMoved(Game game, Vector3 screenPos)
+        public void MouseMoved(Game game, Camera camera, Point screenPos)
         {
             if (!_mousePressed)
                 return;
 
-            OnMouseDrag(game, screenPos);
+            OnMouseDrag(game, camera, screenPos);
         }
-        protected abstract void OnMouseDrag(Game game, Vector3 screenPos);
+        protected abstract void OnMouseDrag(Game game, Camera camera, Point screenPos);
     }
 }

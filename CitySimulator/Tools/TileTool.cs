@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using OpenTK;
+using System.Drawing;
 
 namespace CitySimulator.Tools {
     class TileTool : Tool {
@@ -11,19 +11,19 @@ namespace CitySimulator.Tools {
             _effect = effect;
         }
 
-        protected override void OnMouseDown(Game game, Vector3 screenPos)
+        protected override void OnMouseDown(Game game, Camera camera, Point screenPos)
         {
-            _area.Start = screenPos.Xy.Floor();
+            var pos3D = camera.ScreenSpaceToWorldSpace(screenPos, null, true);
+            _area.Start = pos3D.Xy.Floor();
         }
         
-        protected override void OnMouseDrag(Game game, Vector3 screenPos) {
-            _area.End = screenPos.Xy.Floor();
+        protected override void OnMouseDrag(Game game, Camera camera, Point screenPos) {
+
+            var pos3D = camera.ScreenSpaceToWorldSpace(screenPos, null, true);
+            _area.End = pos3D.Xy.Floor();
         }
 
-        protected override void OnMouseUp(Game game, Vector3 screenPos)
-        {
-            _area.End = screenPos.Xy.Floor();
-
+        protected override void OnMouseUp(Game game, Camera camera, Point screenPos) {
             var cost = CalculateCost();
 
             if (cost > game.Money) {
