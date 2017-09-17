@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7372C6C9-FE86-4D77-9811-4096D5F79765}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CitySimulator</RootNamespace>
     <AssemblyName>CitySimulator</AssemblyName>
@@ -54,6 +54,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
@@ -84,6 +87,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building.cs" />
+    <Compile Include="BuildingGeneration\FloorPlanGenerator.cs" />
+    <Compile Include="BuildingGeneration\FloorPlan.cs" />
     <Compile Include="BuildingType.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Desire\CityActor.cs" />
@@ -91,6 +96,8 @@
     <Compile Include="CityMap.cs" />
     <Compile Include="CityGenerator.cs" />
     <Compile Include="GrowthSimulator.cs" />
+    <Compile Include="Heightmap.cs" />
+    <Compile Include="Mesh.cs" />
     <Compile Include="PerlinNoise.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -100,6 +107,7 @@
     <Compile Include="TkCityRenderer.cs" />
     <Compile Include="TkGameWindow.cs" />
     <Compile Include="Tools\AreaSelector.cs" />
+    <Compile Include="Tools\PaddingTool.cs" />
     <Compile Include="Tools\TileTool.cs" />
     <Compile Include="Tools\Tool.cs" />
     <Compile Include="Tools\ToolboxFactory.cs" />

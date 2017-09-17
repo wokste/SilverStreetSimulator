@@ -1,7 +1,10 @@
 ﻿using System.Drawing;
 
 namespace CitySimulator {
-    class CityMap {
+    class CityMap
+    {
+        internal HeightMap HeightMap;
+
         internal Tile[,] Terrain;
         
         internal readonly int Width;
@@ -12,6 +15,7 @@ namespace CitySimulator {
             Height = height;
 
             Terrain = new Tile[Width, Height];
+            HeightMap = new HeightMap(Width, Height);
 
             for (var x = 0; x < Width; x++){
                 for (var y = 0; y < Height; y++){

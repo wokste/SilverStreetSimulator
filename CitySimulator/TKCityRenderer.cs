@@ -8,12 +8,15 @@ namespace CitySimulator {
 
         private readonly Texture _tileSetSprite;
         private readonly Texture _buildingSprite;
+        private Mesh _heightMapMesh;
 
         public TkCityRenderer(CityMap cityMap) {
             _cityMap = cityMap;
 
             _tileSetSprite = new Texture("Tileset.png");
             _buildingSprite = new Texture("buildings1x1.png");
+
+            _heightMapMesh = _cityMap.HeightMap.ToMesh();
         }
 
         public void Draw() {
@@ -25,7 +28,25 @@ namespace CitySimulator {
             var area = GetRenderArea();
 
             _tileSetSprite.Bind();
-            
+
+            _heightMapMesh.Render();
+
+            // Water
+
+            GL.Disable(EnableCap.Texture2D);
+            GL.Color4((byte)128, (byte)192, (byte)255, (byte)128);
+
+            GL.Begin(PrimitiveType.Quads);
+            GL.Vertex3(0, 0, -2);
+            GL.Vertex3(0, 128, -2);
+            GL.Vertex3(128, 128, -2);
+            GL.Vertex3(128, 0, -2);
+            GL.End();
+
+            GL.Color4((byte)255, (byte)255, (byte)255, (byte)255);
+            GL.Enable(EnableCap.Texture2D);
+
+            /*
             GL.Begin(PrimitiveType.Triangles);
 
             void Vertex3(float x, float y, float z)
@@ -62,6 +83,7 @@ namespace CitySimulator {
             }
 
             GL.End();
+            */
         }
 
         private void DrawBuildings() {

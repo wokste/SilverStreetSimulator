@@ -9,7 +9,7 @@ namespace CitySimulator.Tools{
         /// Called when the mouse is clicked while the tool is active
         /// </summary>
         /// <param name="game">The game</param>
-        /// <param name="view">The isometric view for converting screen positions in other positions.</param>
+        /// <param name="camera">The camera for converting screen positions in other positions.</param>
         /// <param name="screenPos">The screen position in pixels.</param>
         public void MouseDown(Game game, Camera camera, Point screenPos)
         {
@@ -27,7 +27,7 @@ namespace CitySimulator.Tools{
         /// Called when the mouse is released while the tool is active
         /// </summary>
         /// <param name="game">The game</param>
-        /// <param name="view">The isometric view for converting screen positions in other positions.</param>
+        /// <param name="camera">The camera for converting screen positions in other positions.</param>
         /// <param name="screenPos">The screen position in pixels.</param>
         public void MouseUp(Game game, Camera camera, Point screenPos)
         {
@@ -45,7 +45,7 @@ namespace CitySimulator.Tools{
         /// Called when the mouse is dragged while the tool is active
         /// </summary>
         /// <param name="game">The game</param>
-        /// <param name="view">The isometric view for converting screen positions in other positions.</param>
+        /// <param name="camera">The camera for converting screen positions in other positions.</param>
         /// <param name="screenPos">The screen position in pixels.</param>
         public void MouseMoved(Game game, Camera camera, Point screenPos)
         {

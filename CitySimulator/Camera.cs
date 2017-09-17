@@ -6,9 +6,9 @@ using OpenTK.Graphics.OpenGL;
 namespace CitySimulator {
     class Camera {
         private Vector3 _focus = new Vector3(0, 0, 0);
-        private Vector3 _dir = new Vector3(-1, -1, -0.70710678118f);
-        private float rotZ = (float)(Math.PI / 4) * -1f;
-        private float rotX = 0.7654f;//1.3f;
+        private readonly Vector3 _dir = new Vector3(-1, -1, -0.70710678118f);
+        private float _rotZ = (float)(Math.PI / 4) * -1f;
+        private readonly float _rotX = 0.7654f;//1.3f;
 
         internal float Zoom = 32;
 
@@ -18,8 +18,8 @@ namespace CitySimulator {
         {
             get
             {
-                var quatZ = Quaternion.FromAxisAngle(Vector3.UnitZ, rotZ);
-                var quatX = Quaternion.FromAxisAngle(Vector3.UnitX, rotX);
+                var quatZ = Quaternion.FromAxisAngle(Vector3.UnitZ, _rotZ);
+                var quatX = Quaternion.FromAxisAngle(Vector3.UnitX, _rotX);
                 var dir = quatZ * quatX * Vector3.UnitY;
 
                 Console.WriteLine($"Dir: {dir} should be {_dir}");
@@ -47,8 +47,8 @@ namespace CitySimulator {
 
         internal void MoveRotate(Vector2 rotation)
         {
-            //rotX = MathHelper.Clamp(rotX + rotation.X, 0.3f, 1.3f); 
-            rotZ = rotZ + rotation.Y;
+            //_rotX = MathHelper.Clamp(_rotX + rotation.X, 0.3f, 1.3f); 
+            _rotZ = _rotZ + rotation.Y;
         }
         
         internal Vector3 ScreenSpaceToWorldSpace(Point screenSpace, object heightMap, bool translate)

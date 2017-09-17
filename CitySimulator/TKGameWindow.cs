@@ -33,7 +33,7 @@ namespace CitySimulator {
             base.OnLoad(e);
             
             GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
-            //GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.Enable(EnableCap.Texture2D);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
@@ -122,12 +122,12 @@ namespace CitySimulator {
             _camera.SetMatrices();
 
             _renderer.Draw();
-            renderMouse();
+            RenderMouse();
 
             SwapBuffers();
         }
         
-        private void renderMouse()
+        private void RenderMouse()
         {
             var mouse = Mouse.GetState();
             var mousePos = new Point(mouse.X, mouse.Y);

@@ -9,11 +9,9 @@ namespace CitySimulator.Desire {
         // TODO: This should be moved into zone, I believe. Also, there should be a list of buildings.
 
         readonly Random _rnd = new Random();
-        private string _name;
         readonly ZoneType _zone;
 
-        public CityActor(string name, ZoneType zone) {
-            _name = name;
+        public CityActor( ZoneType zone) {
             _zone = zone;
         }
 
