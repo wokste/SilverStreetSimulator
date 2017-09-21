@@ -21,6 +21,8 @@ namespace CitySimulator {
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertexData.Length * sizeof(float)), vertexData, BufferUsageHint.StaticDraw);
 
             _numIndices = indices.Length;
+
+
         }
 
         internal void Render() {
@@ -30,21 +32,21 @@ namespace CitySimulator {
             // Bind vertex buffer:
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
             GL.EnableClientState(ArrayCap.VertexArray);
-            //GL.EnableClientState(ArrayCap.TextureCoordArray);
+            GL.EnableClientState(ArrayCap.TextureCoordArray);
 
-            GL.VertexPointer(3, VertexPointerType.Float, 0, IntPtr.Zero);
-            //GL.TexCoordPointer(5,TexCoordPointerType.Float, 2, IntPtr.Zero);
+            GL.VertexPointer(3, VertexPointerType.Float, 5 * sizeof(float), IntPtr.Zero);
+            GL.TexCoordPointer(2,TexCoordPointerType.Float, 5 * sizeof(float), IntPtr.Zero + 3 * sizeof(float));
 
             // Draw:            
             GL.DrawElements(PrimitiveType.Triangles, _numIndices, DrawElementsType.UnsignedShort, IntPtr.Zero);
 
             // Disable:
-            //GL.DisableClientState(ArrayCap.TextureCoordArray);
+            GL.DisableClientState(ArrayCap.TextureCoordArray);
             GL.DisableClientState(ArrayCap.VertexArray);
         }
         
         public void Dispose() {
-            throw new NotImplementedException();
+            GL.DeleteBuffers(2, new []{ _indexBufferId , _vertexBufferId});
         }
 
         internal struct Face {
@@ -89,7 +91,7 @@ namespace CitySimulator {
                 }
             }
 
-            internal float[] VerticesPrimitives => Vertices.SelectMany(v => new[] { v.Pos.X, v.Pos.Y, v.Pos.Z/*, v.TexCoords.X, v.TexCoords.Y*/ }).ToArray();
+            internal float[] VerticesPrimitives => Vertices.SelectMany(v => new[] { v.Pos.X, v.Pos.Y, v.Pos.Z, v.TexCoords.X, v.TexCoords.Y }).ToArray();
             internal ushort[] FacesPrimitives => Faces.SelectMany(f => new[] {(ushort)f.V0, (ushort)f.V1, (ushort)f.V2}).ToArray();
 
             internal Mesh ToMesh()

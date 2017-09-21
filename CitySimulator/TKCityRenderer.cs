@@ -25,8 +25,6 @@ namespace CitySimulator {
         }
 
         private void DrawTerrain() {
-            var area = GetRenderArea();
-
             _tileSetSprite.Bind();
 
             _heightMapMesh.Render();
@@ -36,11 +34,13 @@ namespace CitySimulator {
             GL.Disable(EnableCap.Texture2D);
             GL.Color4((byte)128, (byte)192, (byte)255, (byte)128);
 
+            var waterLevel = -2f;
+
             GL.Begin(PrimitiveType.Quads);
-            GL.Vertex3(0, 0, -2);
-            GL.Vertex3(0, 128, -2);
-            GL.Vertex3(128, 128, -2);
-            GL.Vertex3(128, 0, -2);
+            GL.Vertex3(0, 0, waterLevel);
+            GL.Vertex3(0, 128, waterLevel);
+            GL.Vertex3(128, 128, waterLevel);
+            GL.Vertex3(128, 0, waterLevel);
             GL.End();
 
             GL.Color4((byte)255, (byte)255, (byte)255, (byte)255);

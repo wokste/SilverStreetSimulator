@@ -6,6 +6,7 @@ using OpenTK.Input;
 using CitySimulator.Tools;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 
 namespace CitySimulator {
     class TkGameWindow : GameWindow {
@@ -21,6 +22,7 @@ namespace CitySimulator {
 
         public TkGameWindow() : base(800, 600, GraphicsMode.Default, "Silver Street Simulator") {
             VSync = VSyncMode.On;
+            Context.ErrorChecking = true;
             
             var rnd = new Random();
             _game = new Game(rnd.Next());

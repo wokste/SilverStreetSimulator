@@ -10,7 +10,7 @@ namespace CitySimulator {
     {
         internal float[,] Height;
 
-        private const float texScale = 0.1f;
+        private const float _texScale = 0.1f;
 
         internal HeightMap(int sizeX, int sizeY)
         {
@@ -26,7 +26,7 @@ namespace CitySimulator {
                 {
                     factory.Vertices.Add(new Mesh.Vertex {
                         Pos = new Vector3(x, y, Height[x, y]),
-                        TexCoords = new Vector2(x * texScale, y * texScale)
+                        TexCoords = new Vector2(x * _texScale, y * _texScale)
                     });
                 }
             }
