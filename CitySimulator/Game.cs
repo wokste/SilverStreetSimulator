@@ -30,8 +30,8 @@ namespace CitySimulator {
             var population = 0;
             var jobs = 0;
 
-            for (var x = 0; x < City.Width; x++) {
-                for (var y = 0; y < City.Height; y++) {
+            for (var x = 0; x < City.SizeX; x++) {
+                for (var y = 0; y < City.SizeY; y++) {
                     var building = City.Terrain[x, y].Building;
                     if (building != null) {
                         population += building.Type.Population;

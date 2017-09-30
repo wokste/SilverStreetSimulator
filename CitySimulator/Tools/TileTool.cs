@@ -13,13 +13,13 @@ namespace CitySimulator.Tools {
 
         protected override void OnMouseDown(Game game, Camera camera, Point screenPos)
         {
-            var pos3D = camera.ScreenSpaceToWorldSpace(screenPos, null, true);
+            var pos3D = camera.ViewportSpaceToWorldSpace(screenPos, null, true);
             _area.Start = pos3D.Xy.Floor();
         }
         
         protected override void OnMouseDrag(Game game, Camera camera, Point screenPos) {
 
-            var pos3D = camera.ScreenSpaceToWorldSpace(screenPos, null, true);
+            var pos3D = camera.ViewportSpaceToWorldSpace(screenPos, null, true);
             _area.End = pos3D.Xy.Floor();
         }
 

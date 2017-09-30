@@ -1,6 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using System.Collections.Generic;
 
 namespace CitySimulator {
     class TkCityRenderer {
@@ -9,11 +11,14 @@ namespace CitySimulator {
         private readonly Texture _tileSetSprite;
         private readonly Texture _buildingSprite;
         private Mesh _heightMapMesh;
+        private double _time = 0;
+
+        private Dictionary<Building, Mesh> _buildingMeshes = new Dictionary<Building, Mesh>();
 
         public TkCityRenderer(CityMap cityMap) {
             _cityMap = cityMap;
 
-            _tileSetSprite = new Texture("Tileset.png");
+            _tileSetSprite = new Texture("grass.png");
             _buildingSprite = new Texture("buildings1x1.png");
 
             _heightMapMesh = _cityMap.HeightMap.ToMesh();
@@ -21,10 +26,12 @@ namespace CitySimulator {
 
         public void Draw() {
             DrawTerrain();
-            //DrawBuildingsIso();
+            DrawBuildings();
         }
 
-        private void DrawTerrain() {
+        private void DrawTerrain()
+        {
+            _time++;
             _tileSetSprite.Bind();
 
             _heightMapMesh.Render();
@@ -34,56 +41,17 @@ namespace CitySimulator {
             GL.Disable(EnableCap.Texture2D);
             GL.Color4((byte)128, (byte)192, (byte)255, (byte)128);
 
-            var waterLevel = -2f;
+            var waterLevel = -2f + (float)Math.Sin(_time / 200.0) * 0.1;
 
             GL.Begin(PrimitiveType.Quads);
-            GL.Vertex3(0, 0, waterLevel);
-            GL.Vertex3(0, 128, waterLevel);
-            GL.Vertex3(128, 128, waterLevel);
-            GL.Vertex3(128, 0, waterLevel);
+            GL.Vertex3(0, waterLevel, 0);
+            GL.Vertex3(0, waterLevel, 128);
+            GL.Vertex3(128, waterLevel, 128);
+            GL.Vertex3(128, waterLevel, 0);
             GL.End();
 
             GL.Color4((byte)255, (byte)255, (byte)255, (byte)255);
             GL.Enable(EnableCap.Texture2D);
-
-            /*
-            GL.Begin(PrimitiveType.Triangles);
-
-            void Vertex3(float x, float y, float z)
-            {
-                GL.Vertex3(x, y, z);
-            }
-
-            void TexCoord2(int tileId, float dx, float dy) {
-                var tex = new Vector2((tileId % 2 + dx) * 0.5f, (tileId / 2 + dy) * 0.5f);
-                GL.TexCoord2(tex);
-            }
-
-            for (var x = area.Left; x < area.Left + area.Width; x++) {
-                for (var y = area.Top; y < area.Top + area.Height; y++)
-                {
-                    var tileId = _cityMap.Terrain[x, y].Terrain;
-
-                    if (_cityMap.IsRoad(x, y))
-                        tileId = 3;
-
-                    TexCoord2(tileId, 0, 0);
-                    Vertex3(x, y, 0);
-                    TexCoord2(tileId, 1, 0);
-                    Vertex3(x + 1, y, 0);
-                    TexCoord2(tileId, 0, 1);
-                    Vertex3(x, y + 1, 0);
-                    TexCoord2(tileId, 1, 0);
-                    Vertex3(x + 1, y, 0);
-                    TexCoord2(tileId, 0, 1);
-                    Vertex3(x, y + 1, 0);
-                    TexCoord2(tileId, 1, 1);
-                    Vertex3(x + 1, y + 1, 0);
-                }
-            }
-
-            GL.End();
-            */
         }
 
         private void DrawBuildings() {
@@ -97,6 +65,7 @@ namespace CitySimulator {
                         continue;
 
                     var pos = new Vector3(x + 0.5f, y + 0.5f, 0);
+                    
 
                     //_buildingSprite.Render2D(vecScreen, building.Type.TextureRect, new Vector2(1 / View.Zoom, 1 / View.Zoom));
                 }
@@ -104,23 +73,7 @@ namespace CitySimulator {
         }
 
         private Rectangle GetRenderArea() {
-            return new Rectangle(0,0, _cityMap.Width, _cityMap.Height);
-            /*
-            var screenX = 1024;// ScreenSize.X;
-            var screenY = 768;// ScreenSize.Y;
-
-            var corner00 = View.ScreenPxToWens(new Vector2(0, 0));
-            var corner01 = View.ScreenPxToWens(new Vector2(0, screenY));
-            var corner10 = View.ScreenPxToWens(new Vector2(screenX, 0));
-            var corner11 = View.ScreenPxToWens(new Vector2(screenX, screenY));
-
-            var x0 = Math.Max(corner00.X, 0);
-            var x1 = Math.Min(corner11.X + 1, _cityMap.Width);
-            var y0 = Math.Max(corner10.Y, 0);
-            var y1 = Math.Min(corner01.Y + 1, _cityMap.Height);
-
-            return new Rectangle(x0, y0, x1 - x0, y1 - y0);
-            */
+            return new Rectangle(0,0, _cityMap.SizeX, _cityMap.SizeY);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using OpenTK;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
@@ -6,38 +7,44 @@ using OpenTK.Graphics.OpenGL;
 namespace CitySimulator {
     class Camera {
         private Vector3 _focus = new Vector3(0, 0, 0);
-        private readonly Vector3 _dir = new Vector3(-1, -1, -0.70710678118f);
-        private float _rotZ = (float)(Math.PI / 4) * -1f;
-        private readonly float _rotX = 0.7654f;//1.3f;
+        private readonly Vector3 _dir = new Vector3(0, -1 , 0);
+        private float _rotZ = (float)(Math.PI / 4) * 1f;
+        private readonly float _rotX = (float)(Math.PI / 4) * -3f;
 
         internal float Zoom = 32;
 
         internal Size ScreenSize;
 
-        private Matrix4 ModelView
+        private Matrix4 View
         {
             get
             {
-                var quatZ = Quaternion.FromAxisAngle(Vector3.UnitZ, _rotZ);
+                var quatZ = Quaternion.FromAxisAngle(Vector3.UnitY, _rotZ);
                 var quatX = Quaternion.FromAxisAngle(Vector3.UnitX, _rotX);
                 var dir = quatZ * quatX * Vector3.UnitY;
 
-                Console.WriteLine($"Dir: {dir} should be {_dir}");
-
-                var modelView = Matrix4.LookAt(_focus - dir, _focus, Vector3.UnitZ);
+                var modelView = Matrix4.LookAt(_focus - _dir, _focus, Vector3.UnitX); // Should be unitY
                 return modelView;
+            }
+        }
+
+        private Matrix4 Projection
+        {
+            get
+            {
+                return Matrix4.CreateOrthographic(ScreenSize.Width / Zoom, ScreenSize.Height / Zoom, -500.0f, 500.0f);
             }
         }
 
         internal void SetMatrices()
         {
-            var modelview = ModelView;
+            var modelview = View;
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelview);
 
-            var matrix = Matrix4.CreateOrthographic(ScreenSize.Width / Zoom, ScreenSize.Height / Zoom, -500.0f, 500.0f);
+            var projection = Projection;
             GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadMatrix(ref matrix);
+            GL.LoadMatrix(ref projection);
         }
 
         internal void MoveFocus(Vector3 mouseDrag3D)
@@ -51,22 +58,44 @@ namespace CitySimulator {
             _rotZ = _rotZ + rotation.Y;
         }
         
-        internal Vector3 ScreenSpaceToWorldSpace(Point screenSpace, object heightMap, bool translate)
+        internal Vector3 ViewportSpaceToWorldSpace(Point mouse, object heightMap, bool translate)
         {
-            screenSpace.X -= ScreenSize.Width / 2;
-            screenSpace.Y -= ScreenSize.Height / 2;
+            // Following the tutorial of http://antongerdelan.net/opengl/raycasting.html
 
-            // Determine line l = a + lambda b which represents the screen coordinate in 3D
-            var screenSpace4D = new Vector4(screenSpace.X / Zoom, -screenSpace.Y / Zoom, 0, (translate) ? 1 : 0 );
-            var modelViewInverted = ModelView.Inverted();
+            var aNds = new Vector2 ((2.0f * mouse.X) / ScreenSize.Width - 1.0f, 1.0f - (2.0f * mouse.Y) / ScreenSize.Height);
 
-            var a4 = screenSpace4D * modelViewInverted;//new Vector4(screenSpace.X / Zoom, -screenSpace.Y / Zoom, 0, 0) * ModelView.Inverted();
-            var a = a4.Xyz;
+            var aClip = new Vector4(aNds.X, 0.0f, aNds.Y, 1.0f); // translate?
+
+            Debug.Assert(Math.Abs(aClip.X) <= 1 && Math.Abs(aClip.Y) <= 1 && Math.Abs(aClip.Z) <= 1 && Math.Abs(aClip.W) <= 1);
+
+            var aEye = Projection.Inverted() * aClip;
+
+            //aEye.Z = 0;
+            //aEye.W = 0;
+
+            var aWorld = View.Inverted() * aEye;
+
+            var a = aWorld.Xyz;
             var b = _dir;
 
-            // Find the lambda for which this line intersects the z plane.
+
+            Console.WriteLine($"I = a ({a}) + labda b({b})");
+
+            return a;
+/*
+            var normDevSpace4D = new Vector3(mouse.X - ScreenSize.Width / 2, mouse.Y - ScreenSize.Height / 2, 0) / Zoom;
+
+            // Determine line l = a + lambda b which represents the screen coordinate in 3D
+            var screenSpace4D = new Vector4(mouse.X / Zoom, -mouse.Y / Zoom, 0, (translate) ? 1 : 0 );
+            var modelViewInverted = View.Inverted();
+
+            var a4 = screenSpace4D * modelViewInverted;//new Vector4(mouse.X / Zoom, -mouse.Y / Zoom, 0, 0) * View.Inverted();
+            var a = a4.Xyz;*/
+            
+
+            // Find the lambda for which this line intersects the y plane.
             var height = 0;
-            var lambda = (height - a.Z) / b.Z;
+            var lambda = (height - a.Y) / b.Y;
 
             // Determine the point for this line with the determined lambda.
             var point = a + lambda * b;

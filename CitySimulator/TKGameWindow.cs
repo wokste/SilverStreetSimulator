@@ -134,21 +134,23 @@ namespace CitySimulator {
             var mouse = Mouse.GetState();
             var mousePos = new Point(mouse.X, mouse.Y);
             Title = $"{mousePos} {MOUSE_POS_TEMP}";
-            var pos3D = _camera.ScreenSpaceToWorldSpace(MOUSE_POS_TEMP, null, true);
+            var pos3D = _camera.ViewportSpaceToWorldSpace(MOUSE_POS_TEMP, null, true);
 
+            GL.Disable(EnableCap.DepthTest);
             GL.Disable(EnableCap.Texture2D);
             
             GL.Begin(PrimitiveType.Triangles);
 
             for (var i = 0; i < 3; i++)
             {
-                var vec = new Vector3((float)Math.Sin(i * 0.6667 * Math.PI) * 0.5f, (float)Math.Cos(i * 0.6667 * Math.PI) * 0.5f, 0.1f);
+                var vec = new Vector3((float)Math.Sin(i * 0.6667 * Math.PI) * 0.5f, 0.1f, (float)Math.Cos(i * 0.6667 * Math.PI) * 0.5f);
                 GL.Vertex3(vec + pos3D);
             }
 
             GL.End();
 
             GL.Enable(EnableCap.Texture2D);
+            GL.Enable(EnableCap.DepthTest);
         }
         
     }

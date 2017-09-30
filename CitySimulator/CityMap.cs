@@ -7,25 +7,25 @@ namespace CitySimulator {
 
         internal Tile[,] Terrain;
         
-        internal readonly int Width;
-        internal readonly int Height;
+        internal readonly int SizeX;
+        internal readonly int SizeY;
 
-        internal CityMap(int width, int height) {
-            Width = width;
-            Height = height;
+        internal CityMap(int sizeX, int sizeY) {
+            SizeX = sizeX;
+            SizeY = sizeY;
 
-            Terrain = new Tile[Width, Height];
-            HeightMap = new HeightMap(Width, Height);
+            Terrain = new Tile[SizeX, SizeY];
+            HeightMap = new HeightMap(SizeX, SizeY);
 
-            for (var x = 0; x < Width; x++){
-                for (var y = 0; y < Height; y++){
+            for (var x = 0; x < SizeX; x++){
+                for (var y = 0; y < SizeY; y++){
                     Terrain[x, y].ZoneId = -1;
                 }
             }
         }
 
         internal bool IsFreeArea(Point pos) {
-            if (pos.X < 0 || pos.Y < 0 || pos.X >= Width || pos.Y >= Height) {
+            if (pos.X < 0 || pos.Y < 0 || pos.X >= SizeX || pos.Y >= SizeY) {
                 return false;
             }
             
@@ -43,7 +43,8 @@ namespace CitySimulator {
             }
 
             var building = new Building {
-                Type = type
+                Type = type,
+                Mesh = type.GenerateMesh()
             };
 
             Terrain[position.X, position.Y].Building = building;
@@ -51,7 +52,7 @@ namespace CitySimulator {
         }
         
         internal bool IsRoad(int x, int y) {
-            if (x < 0 || y < 0 || y >= Width || y >= Height) {
+            if (x < 0 || y < 0 || y >= SizeX || y >= SizeY) {
                 return false;
             }
 

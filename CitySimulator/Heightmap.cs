@@ -25,7 +25,7 @@ namespace CitySimulator {
                 for (var y = 0; y < Height.GetLength(1); y++)
                 {
                     factory.Vertices.Add(new Mesh.Vertex {
-                        Pos = new Vector3(x, y, Height[x, y]),
+                        Pos = new Vector3(x, Height[x, y], y),
                         TexCoords = new Vector2(x * _texScale, y * _texScale)
                     });
                 }

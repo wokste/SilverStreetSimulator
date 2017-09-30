@@ -54,8 +54,8 @@ namespace CitySimulator.Desire {
             // TODO: This function has an O(n^2) computation power which is likely too slow. Some kind of caching might be useful.
             var list = new List<Point>();
 
-            for (var x = 0; x < city.Width; x++) {
-                for (var y = 0; y < city.Width; y++) {
+            for (var x = 0; x < city.SizeX; x++) {
+                for (var y = 0; y < city.SizeX; y++) {
                     if (city.IsRoad(x, y)) {
                         list.Add(new Point(x, y));
                     }
@@ -74,9 +74,9 @@ namespace CitySimulator.Desire {
                 var rY = roadPos.Y;
 
                 var xMin = Math.Max(city.IsRoad(rX - 1, rY) ? rX : rX - 3, 0);
-                var xMax = Math.Min(city.IsRoad(rX + 1, rY) ? rX : rX + 3, city.Width - 1);
+                var xMax = Math.Min(city.IsRoad(rX + 1, rY) ? rX : rX + 3, city.SizeX - 1);
                 var yMin = Math.Max(city.IsRoad(rX, rY - 1) ? rY : rY - 3, 0);
-                var yMax = Math.Min(city.IsRoad(rX, rY + 1) ? rY : rY + 3, city.Height - 1);
+                var yMax = Math.Min(city.IsRoad(rX, rY + 1) ? rY : rY + 3, city.SizeY - 1);
                 
                 for (var x = xMin; x <= xMax; x++) {
                     for (var y = yMin; y <= yMax; y++) {

@@ -11,7 +11,7 @@ namespace CitySimulator.Tools {
         protected override void OnMouseDown(Game game, Camera camera, Point screenPos)
         {
             _lastScreenPos = screenPos;
-            _lastScreenPos3D = camera.ScreenSpaceToWorldSpace(screenPos, null, false);
+            _lastScreenPos3D = camera.ViewportSpaceToWorldSpace(screenPos, null, false);
         }
 
         protected override void OnMouseUp(Game game, Camera camera, Point screenPos)
@@ -20,7 +20,7 @@ namespace CitySimulator.Tools {
 
         protected override void OnMouseDrag(Game game, Camera camera, Point screenPos)
         {
-            var mousePos3D = camera.ScreenSpaceToWorldSpace(screenPos, null, false);
+            var mousePos3D = camera.ViewportSpaceToWorldSpace(screenPos, null, false);
 
             var keyboard = Keyboard.GetState();
 

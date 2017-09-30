@@ -27,8 +27,8 @@ namespace CitySimulator {
                 Scale = 3
             };
 
-            for (var x = 0; x < cityMap.Width; x++) {
-                for (var y = 0; y < cityMap.Height; y++) {
+            for (var x = 0; x < cityMap.SizeX; x++) {
+                for (var y = 0; y < cityMap.SizeY; y++) {
                     var height = heightMap.Get(x, y);
                     var vegitation = vegitationMap.Get(x, y);
 
@@ -43,8 +43,8 @@ namespace CitySimulator {
             }
 
 
-            for (var x = 0; x < cityMap.Width + 1; x++) {
-                for (var y = 0; y < cityMap.Height + 1; y++) {
+            for (var x = 0; x < cityMap.SizeX + 1; x++) {
+                for (var y = 0; y < cityMap.SizeY + 1; y++) {
                     cityMap.HeightMap.Height[x, y] = heightMap.Get(x - 0.5f, y - 0.5f) * 4.0f;
                 }
             }
