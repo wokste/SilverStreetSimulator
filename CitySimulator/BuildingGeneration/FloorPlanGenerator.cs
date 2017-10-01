@@ -1,15 +1,22 @@
-﻿using OpenTK;
+﻿using System;
+using System.Diagnostics;
+using System.Drawing;
+using OpenTK;
 
 namespace CitySimulator.BuildingGeneration {
     class FloorPlanGenerator {
-        internal FloorPlan Generate()
+        internal FloorPlan Generate(Vector2 size)
         {
+            var halfSize = size / 2;
+
             var floorPlan = new FloorPlan();
 
             var polygon = new Polygon();
 
             polygon.Corners = new[]
-                {new Vector2(0.1f, 0.1f), new Vector2(0.1f, 0.9f), new Vector2(0.9f, 0.9f), new Vector2(0.9f, 0.1f)};
+                {-halfSize, new Vector2(-halfSize.X, halfSize.Y), halfSize, new Vector2(halfSize.X, -halfSize.Y)};
+
+            floorPlan.Polygons = new[] { polygon };
 
             return floorPlan;
         }

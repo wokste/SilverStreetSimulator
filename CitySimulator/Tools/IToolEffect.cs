@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using OpenTK;
 
 namespace CitySimulator.Tools {
     interface IToolEffect {
@@ -69,9 +70,7 @@ namespace CitySimulator.Tools {
 
         public void Apply(int x, int y) {
             // This needs to be changed as I don't want buildings to be used for roads.
-            _city.Terrain[x, y].Building = new Building {
-                Type = _zone.GetRandom(_rnd)
-            };
+            _city.PlaceBuilding(new Point(x, y), _zone.GetRandom(_rnd));
             _city.Terrain[x, y].ZoneId = _zone.Id;
         }
     }

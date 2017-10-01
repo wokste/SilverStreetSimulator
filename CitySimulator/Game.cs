@@ -14,7 +14,7 @@ namespace CitySimulator {
             ZoneManager.Load($"{Program.AssetsFolder}buildings.xml");
 
             var cityGenerator = new CityGenerator(seed);
-            City = cityGenerator.GenerateCity();
+            City = cityGenerator.GenerateCity(this);
 
             GrowthSimulator = new GrowthSimulator(City, ZoneManager);
         }

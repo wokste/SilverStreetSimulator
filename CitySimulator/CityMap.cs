@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using OpenTK;
 
 namespace CitySimulator {
     class CityMap
@@ -29,7 +30,7 @@ namespace CitySimulator {
                 return false;
             }
             
-            var tile = Terrain[pos.X, pos.Y];
+            var tile = Terrain[(int)pos.X, (int)pos.Y];
             if (tile.Terrain == 0) {
                 return false;
             }
@@ -44,10 +45,11 @@ namespace CitySimulator {
 
             var building = new Building {
                 Type = type,
-                Mesh = type.GenerateMesh()
+                Mesh = type.GenerateMesh(),
+                Pos  = new Vector2(position.X, position.Y)
             };
 
-            Terrain[position.X, position.Y].Building = building;
+            Terrain[(int)position.X, (int)position.Y].Building = building;
             return true;
         }
         

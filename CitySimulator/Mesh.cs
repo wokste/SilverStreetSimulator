@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -64,6 +65,15 @@ namespace CitySimulator {
             // TODO, normal
             internal Vector3 Pos;
             internal Vector2 TexCoords;
+
+            public static Vertex operator+(Vertex l, Vertex r)
+            {
+                return new Vertex
+                {
+                    Pos = l.Pos + r.Pos,
+                    TexCoords = l.TexCoords + r.TexCoords
+                };
+            }
         }
 
         internal class Factory {
@@ -98,6 +108,19 @@ namespace CitySimulator {
             {
                 Validate();
                 return new Mesh(FacesPrimitives, VerticesPrimitives); 
+            }
+
+            internal void AddSurface(Vertex v0, Vertex v0To1, Vertex v0To2)
+            {
+                var normal = Vector3.Cross(v0To1.Pos, v0To2.Pos);
+                var v = new[] {v0, v0 + v0To1, v0 + v0To1 + v0To2, v0 + v0To2};
+
+                var pos = Vertices.Count;
+
+                Vertices.AddRange(v);
+
+                Faces.Add(new Face(pos, pos + 1, pos + 2));
+                Faces.Add(new Face(pos + 2, pos + 3, pos));
             }
         }
     }

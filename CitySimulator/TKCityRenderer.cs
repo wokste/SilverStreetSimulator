@@ -3,6 +3,7 @@ using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CitySimulator {
     class TkCityRenderer {
@@ -12,8 +13,6 @@ namespace CitySimulator {
         private readonly Texture _buildingSprite;
         private Mesh _heightMapMesh;
         private double _time = 0;
-
-        private Dictionary<Building, Mesh> _buildingMeshes = new Dictionary<Building, Mesh>();
 
         public TkCityRenderer(CityMap cityMap) {
             _cityMap = cityMap;
@@ -55,25 +54,35 @@ namespace CitySimulator {
         }
 
         private void DrawBuildings() {
-            var area = GetRenderArea();
             
-            for (var x = area.Left; x < area.Left + area.Width; x++) {
-                for (var y = area.Top; y < area.Top + area.Height; y++) {
+            GL.Disable(EnableCap.Texture2D);
+
+            for (var x = 0; x < _cityMap.SizeX; x++) {
+                for (var y = 0; y < _cityMap.SizeY; y++) {
                     var building = _cityMap.Terrain[x, y].Building;
 
                     if (building == null)
                         continue;
 
-                    var pos = new Vector3(x + 0.5f, y + 0.5f, 0);
-                    
+                    GL.Color3((byte)((x * 33 + y * 127) % 128 + 127), (byte)((x * 49 + y * 33) % 128 + 127), (byte)((x * 17 + y * 42) % 128 + 127));
 
-                    //_buildingSprite.Render2D(vecScreen, building.Type.TextureRect, new Vector2(1 / View.Zoom, 1 / View.Zoom));
+                    //TODO: Find correct heightmap values
+                    var height = new [] { _cityMap.HeightMap.Height[x, y], _cityMap.HeightMap.Height[x, y+1], _cityMap.HeightMap.Height[x+1, y], _cityMap.HeightMap.Height[x+1, y+1] }.Min();
+
+                    var pos = new Vector3(x + 0.5f, height, y + 0.5f);
+
+                    GL.PushMatrix();
+
+                    GL.Translate(pos);
+
+                    building.Mesh.Render();
+
+                    GL.PopMatrix();
                 }
             }
-        }
 
-        private Rectangle GetRenderArea() {
-            return new Rectangle(0,0, _cityMap.SizeX, _cityMap.SizeY);
+            GL.Color3((byte)255, (byte)255, (byte)255);
+            GL.Enable(EnableCap.Texture2D);
         }
     }
 }

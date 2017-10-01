@@ -23,7 +23,8 @@ namespace CitySimulator {
                 var quatX = Quaternion.FromAxisAngle(Vector3.UnitX, _rotX);
                 var dir = quatZ * quatX * Vector3.UnitY;
 
-                var modelView = Matrix4.LookAt(_focus - _dir, _focus, Vector3.UnitX); // Should be unitY
+                //var modelView = Matrix4.LookAt(_focus - _dir, _focus, Vector3.UnitX); // Should be unitY
+                var modelView = Matrix4.LookAt(_focus - dir, _focus, Vector3.UnitY);
                 return modelView;
             }
         }
@@ -38,13 +39,13 @@ namespace CitySimulator {
 
         internal void SetMatrices()
         {
-            var modelview = View;
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref modelview);
-
             var projection = Projection;
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref projection);
+            
+            var modelview = View;
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadMatrix(ref modelview);
         }
 
         internal void MoveFocus(Vector3 mouseDrag3D)

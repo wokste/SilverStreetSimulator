@@ -89,6 +89,8 @@
     <Compile Include="Building.cs" />
     <Compile Include="BuildingGeneration\FloorPlanGenerator.cs" />
     <Compile Include="BuildingGeneration\FloorPlan.cs" />
+    <Compile Include="BuildingGeneration\RoofGenerator.cs" />
+    <Compile Include="BuildingGeneration\WallGenerator.cs" />
     <Compile Include="BuildingType.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Desire\CityActor.cs" />

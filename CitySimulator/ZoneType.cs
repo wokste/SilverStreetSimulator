@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
+using OpenTK;
 
 namespace CitySimulator {
     class ZoneType {
@@ -29,27 +30,22 @@ namespace CitySimulator {
             BuildSoundName = zoneXmlElem.GetString("sound", true);
 
             foreach (var buildingGroupElem in zoneXmlElem.Elements()) {
-                var sizeArray = buildingGroupElem.Attribute("size").Value.Split('x').Select(int.Parse).ToArray();
-                var size = new Size(sizeArray[0], sizeArray[1]);
+                var sizeArray = buildingGroupElem.Attribute("size").Value.Split('x').Select(float.Parse).ToArray();
+                var size = new Vector2(sizeArray[0], sizeArray[1]);
 
                 var population = buildingGroupElem.GetInt("population",true);
                 var jobs = buildingGroupElem.GetInt("jobs", true);
+                var height = buildingGroupElem.GetFloat("height");
 
-                foreach (var textureElem in buildingGroupElem.Elements()) {
-                    var left = textureElem.GetInt("left");
-                    var top = textureElem.GetInt("top");
-                    var width = textureElem.GetInt("width");
-                    var height = textureElem.GetInt("height");
+                var b = new BuildingType
+                {
+                    Size = size,
+                    Population = population,
+                    Jobs = jobs,
+                    Height = height
+                };
 
-                    var b = new BuildingType {
-                        Size = size,
-                        TextureRect = new Rectangle(left,top,width,height),
-                        Population = population,
-                        Jobs = jobs
-                    };
-
-                    _buildings.Add(b);
-                }
+                _buildings.Add(b);
             }
         }
     }

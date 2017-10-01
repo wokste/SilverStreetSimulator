@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Xml.Linq;
 using OpenTK;
 
@@ -42,6 +43,22 @@ namespace CitySimulator {
             }
 
             return int.Parse(valueStr);
+        }
+        
+        internal static float GetFloat(this XElement elem, string name, bool useDefault = false)
+        {
+            var valueStr = elem.GetString(name, useDefault);
+
+            if (valueStr == "")
+            {
+                if (useDefault)
+                {
+                    return 0;
+                }
+                throw new Exception($"missing XML attribute {name}");
+            }
+
+            return float.Parse(valueStr, NumberStyles.Any, CultureInfo.InvariantCulture);
         }
     }
 }
