@@ -50,7 +50,7 @@ namespace CitySimulator {
                     else
                     {
                         factory.Faces.Add(new Mesh.Face(v00, v01, v10));
-                        factory.Faces.Add(new Mesh.Face(v01, v10, v11));
+                        factory.Faces.Add(new Mesh.Face(v01, v11, v10));
                     }
                 }
             }
