@@ -11,18 +11,18 @@ namespace CitySimulator {
 
         internal Mesh GenerateMesh()
         {
-            Mesh.Factory f = new Mesh.Factory();
+            var factory = new Mesh.Factory();
 
             var floor = new FloorPlanGenerator().Generate(Size);
             var height = Height;
 
             var wallGenerator = new WallGenerator();
-            wallGenerator.CreateWalls(floor, height, f);
+            wallGenerator.CreateWalls(floor, height, factory);
 
             var roofGenerator = new RoofGenerator();
-            roofGenerator.CreateRoof(floor, height, f);
+            roofGenerator.CreateRoof(floor, height, factory);
 
-            return f.ToMesh();
+            return factory.ToMesh();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace CitySimulator {
             _cityMap = cityMap;
 
             _heightMapMesh = _cityMap.HeightMap.ToMesh();
-            _heightMapMesh.Texture = new Texture("grass.png");
+            _heightMapMesh.Texture = Program.TextureCache["grass.png"];
 
             var waterMeshFactory = new Mesh.Factory();
             waterMeshFactory.AddSurface(
@@ -30,7 +30,7 @@ namespace CitySimulator {
                 new Mesh.Vertex { Pos = new Vector3(128,0,0), TexCoords = new Vector2(32,0) });
 
             _waterMesh = waterMeshFactory.ToMesh();
-            _waterMesh.Texture = new Texture("water.png");
+            _waterMesh.Texture = Program.TextureCache["water.png"];
 
         }
 

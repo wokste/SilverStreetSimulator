@@ -4,13 +4,12 @@ namespace CitySimulator {
     class Game {
         public double Money = 10000;
         public CityMap City;
-        public readonly ZoneManager ZoneManager;
         public GrowthSimulator GrowthSimulator;
-
+        
         public double Income { get; internal set; }
+        public ZoneManager ZoneManager = new ZoneManager();
 
         public Game(int seed) {
-            ZoneManager = new ZoneManager();
             ZoneManager.Load($"{Program.AssetsFolder}buildings.xml");
 
             var cityGenerator = new CityGenerator(seed);

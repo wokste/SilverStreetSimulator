@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -28,33 +29,6 @@ namespace CitySimulator {
 
             //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Nearest);
             //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Nearest);
-        }
-
-
-        public void Render2D(Point vecIso, Rectangle textureRect, Vector2 scale)
-        {
-            var v0 = new Vector3(vecIso.X, vecIso.Y, 3.0f);
-            var vHor = Vector3.UnitX * textureRect.Width * scale.X;
-            var vVert = Vector3.UnitY * textureRect.Height * scale.Y;
-
-            var t0 = new Vector2(textureRect.Left / Width, textureRect.Top / Height);
-            var tHor = Vector2.UnitX * textureRect.Width / Width;
-            var tVert = Vector2.UnitY * textureRect.Height / Height;
-
-            Bind();
-
-            GL.Begin(PrimitiveType.Quads);
-
-            GL.TexCoord2(t0);
-            GL.Vertex3(v0);
-            GL.TexCoord2(t0 + tHor);
-            GL.Vertex3(v0 + vHor);
-            GL.TexCoord2(t0 + tHor + tVert);
-            GL.Vertex3(v0 + vHor + vVert);
-            GL.TexCoord2(t0 + tVert);
-            GL.Vertex3(v0 + vVert);
-            
-            GL.End();
         }
 
         public void Bind()
