@@ -34,9 +34,11 @@ namespace CitySimulator {
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
             GL.EnableClientState(ArrayCap.VertexArray);
             GL.EnableClientState(ArrayCap.TextureCoordArray);
+            GL.EnableClientState(ArrayCap.NormalArray);
 
-            GL.VertexPointer(3, VertexPointerType.Float, 5 * sizeof(float), IntPtr.Zero);
-            GL.TexCoordPointer(2,TexCoordPointerType.Float, 5 * sizeof(float), IntPtr.Zero + 3 * sizeof(float));
+            GL.VertexPointer(3, VertexPointerType.Float, 8 * sizeof(float), IntPtr.Zero);
+            GL.NormalPointer(NormalPointerType.Float, 8 * sizeof(float), IntPtr.Zero + 3 * sizeof(float));
+            GL.TexCoordPointer(2,TexCoordPointerType.Float, 8 * sizeof(float), IntPtr.Zero + 6 * sizeof(float));
 
             // Draw:            
             GL.DrawElements(PrimitiveType.Triangles, _numIndices, DrawElementsType.UnsignedShort, IntPtr.Zero);
@@ -44,6 +46,7 @@ namespace CitySimulator {
             // Disable:
             GL.DisableClientState(ArrayCap.TextureCoordArray);
             GL.DisableClientState(ArrayCap.VertexArray);
+            GL.DisableClientState(ArrayCap.NormalArray);
         }
         
         public void Dispose() {
@@ -65,13 +68,19 @@ namespace CitySimulator {
             // TODO, normal
             internal Vector3 Pos;
             internal Vector2 TexCoords;
+            internal Vector3 Normal;
 
+            /// <summary>
+            /// The sum of the two vectors.
+            /// Warning: the normal is added which is probably not what you want.
+            /// </summary>
             public static Vertex operator+(Vertex l, Vertex r)
             {
                 return new Vertex
                 {
                     Pos = l.Pos + r.Pos,
-                    TexCoords = l.TexCoords + r.TexCoords
+                    TexCoords = l.TexCoords + r.TexCoords,
+                    Normal = (l.Normal + r.Normal).Normalized()
                 };
             }
         }
@@ -101,7 +110,7 @@ namespace CitySimulator {
                 }
             }
 
-            internal float[] VerticesPrimitives => Vertices.SelectMany(v => new[] { v.Pos.X, v.Pos.Y, v.Pos.Z, v.TexCoords.X, v.TexCoords.Y }).ToArray();
+            internal float[] VerticesPrimitives => Vertices.SelectMany(v => new[] { v.Pos.X, v.Pos.Y, v.Pos.Z, v.Normal.X, v.Normal.Y, v.Normal.Z, v.TexCoords.X, v.TexCoords.Y }).ToArray();
             internal ushort[] FacesPrimitives => Faces.SelectMany(f => new[] {(ushort)f.V0, (ushort)f.V1, (ushort)f.V2}).ToArray();
 
             internal Mesh ToMesh()
@@ -112,7 +121,9 @@ namespace CitySimulator {
 
             internal void AddSurface(Vertex v0, Vertex v0To1, Vertex v0To2)
             {
-                var normal = Vector3.Cross(v0To1.Pos, v0To2.Pos);
+                v0.Normal = Vector3.Cross(v0To1.Pos, v0To2.Pos);
+                v0To1.Normal = Vector3.Zero;
+                v0To2.Normal = Vector3.Zero;
                 var v = new[] {v0, v0 + v0To1, v0 + v0To1 + v0To2, v0 + v0To2};
 
                 var pos = Vertices.Count;

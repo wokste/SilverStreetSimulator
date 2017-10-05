@@ -26,7 +26,8 @@ namespace CitySimulator {
                 {
                     factory.Vertices.Add(new Mesh.Vertex {
                         Pos = new Vector3(x, Height[x, y], y),
-                        TexCoords = new Vector2(x * _texScale, y * _texScale)
+                        TexCoords = new Vector2(x * _texScale, y * _texScale),
+                        Normal = GetNormal(x,y)
                     });
                 }
             }
@@ -56,6 +57,27 @@ namespace CitySimulator {
             }
             
             return factory.ToMesh();
+        }
+
+        private Vector3 GetNormal(int x, int y)
+        {
+            Vector3 delta = new Vector3(0,2,0);
+
+            if (x == 0)
+                delta.X = 2 * (Height[x + 1, y] - Height[x, y]);
+            else if (x == Height.GetLength(0) - 1)
+                delta.X = 2 * (Height[x, y] - Height[x - 1, y]);
+            else
+                delta.X = Height[x+1, y] - Height[x-1, y];
+
+            if (y == 0)
+                delta.Z = 2 * (Height[x, y + 1] - Height[x, y]);
+            else if(y == Height.GetLength(1) - 1)
+                delta.Z = 2 * (Height[x, y] - Height[x, y-1]);
+            else
+                delta.Z = Height[x,y + 1] - Height[x,y - 1];
+            
+            return delta.Normalized();
         }
     }
 }

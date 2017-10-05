@@ -9,6 +9,9 @@ namespace CitySimulator {
     class TkCityRenderer {
         private readonly CityMap _cityMap;
 
+        private Light _sun = new Light(LightName.Light0);
+        private Material _material = new Material();
+
         private readonly Texture _tileSetSprite;
         private readonly Texture _buildingSprite;
         private Mesh _heightMapMesh;
@@ -24,6 +27,9 @@ namespace CitySimulator {
         }
 
         public void Draw() {
+            _sun.Update();
+            _material.Update();
+
             DrawTerrain();
             DrawBuildings();
         }

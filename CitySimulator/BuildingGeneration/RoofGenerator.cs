@@ -31,7 +31,8 @@ namespace CitySimulator.BuildingGeneration
                 factory.Vertices.Add(new Mesh.Vertex
                 {
                     Pos = new Vector3(c.X, height, c.Y),
-                    TexCoords = c // TODO
+                    TexCoords = c, // TODO
+                    Normal = Vector3.UnitY
                 });
             }
 

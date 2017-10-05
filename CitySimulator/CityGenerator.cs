@@ -51,7 +51,7 @@ namespace CitySimulator {
             
             for (var x = 0; x < cityMap.SizeX + 1; x++) {
                 for (var y = 0; y < cityMap.SizeY + 1; y++) {
-                    cityMap.HeightMap.Height[x, y] = heightMap.Get(x - 0.5f, y - 0.5f) * 4.0f;
+                    cityMap.HeightMap.Height[x, y] = heightMap.Get(x - 0.5f, y - 0.5f) * 8.0f;
                 }
             }
         }
