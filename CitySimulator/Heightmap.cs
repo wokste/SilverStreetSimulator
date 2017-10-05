@@ -76,7 +76,10 @@ namespace CitySimulator {
                 delta.Z = 2 * (Height[x, y] - Height[x, y-1]);
             else
                 delta.Z = Height[x,y + 1] - Height[x,y - 1];
-            
+
+            delta.X *= -1;
+            delta.Z *= -1;
+
             return delta.Normalized();
         }
     }

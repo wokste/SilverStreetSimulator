@@ -6,12 +6,12 @@ using OpenTK.Graphics.OpenGL;
 
 namespace CitySimulator {
     class Camera {
-        private Vector3 _focus = new Vector3(0, 0, 0);
-        private readonly Vector3 _dir = new Vector3(0, -1 , 0);
+        private Vector3 _focus = new Vector3(64, 0, 64);
+        private readonly Vector3 _dir = new Vector3(0, -1 , 0).Normalized();
         private float _rotZ = (float)(Math.PI / 4) * 1f;
         private readonly float _rotX = (float)(Math.PI / 4) * -3f;
 
-        internal float Zoom = 32;
+        internal float Zoom = 4;
 
         internal Size ScreenSize;
 
@@ -65,24 +65,30 @@ namespace CitySimulator {
 
             var aNds = new Vector2 ((2.0f * mouse.X) / ScreenSize.Width - 1.0f, 1.0f - (2.0f * mouse.Y) / ScreenSize.Height);
 
-            var aClip = new Vector4(aNds.X, 0.0f, aNds.Y, 1.0f); // translate?
+            var aClip = new Vector4(aNds.X, aNds.Y, -1f, 1f); // translate?
 
             Debug.Assert(Math.Abs(aClip.X) <= 1 && Math.Abs(aClip.Y) <= 1 && Math.Abs(aClip.Z) <= 1 && Math.Abs(aClip.W) <= 1);
 
             var aEye = Projection.Inverted() * aClip;
 
-            //aEye.Z = 0;
+
+            Debug.Assert(Math.Abs(aEye.W - 1) <= 0.001);
+
+            aEye.Z = 0;
             //aEye.W = 0;
 
             var aWorld = View.Inverted() * aEye;
+            var viewInv = View.Inverted();
 
-            var a = aWorld.Xyz;
-            var b = _dir;
+            //Debug.Assert(Math.Abs(aWorld.W - 1) <= 0.001);
+
+            var a = aWorld;
+            var b = new Vector4(_dir, 0);
 
 
             Console.WriteLine($"I = a ({a}) + labda b({b})");
 
-            return a;
+            return a.Xyz;
 /*
             var normDevSpace4D = new Vector3(mouse.X - ScreenSize.Width / 2, mouse.Y - ScreenSize.Height / 2, 0) / Zoom;
 
@@ -101,7 +107,7 @@ namespace CitySimulator {
             // Determine the point for this line with the determined lambda.
             var point = a + lambda * b;
 
-            return point;
+            return point.Xyz;
         }
     }
 }

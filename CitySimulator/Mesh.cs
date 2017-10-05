@@ -9,8 +9,9 @@ namespace CitySimulator {
     class Mesh : IDisposable {
         private readonly uint _indexBufferId;
         private readonly uint _vertexBufferId;
-
         private readonly int _numIndices;
+
+        internal Texture Texture;
 
         internal Mesh(ushort[] indices, float[] vertexData) {
             GL.GenBuffers(1, out _indexBufferId);
@@ -22,11 +23,19 @@ namespace CitySimulator {
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertexData.Length * sizeof(float)), vertexData, BufferUsageHint.StaticDraw);
 
             _numIndices = indices.Length;
-
-
         }
 
         internal void Render() {
+            if (Texture != null)
+            {
+                GL.Enable(EnableCap.Texture2D);
+                Texture.Bind();
+            }
+            else
+            {
+                GL.Disable(EnableCap.Texture2D);
+            }
+
             // Bind index buffer:
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferId);
 
@@ -121,7 +130,7 @@ namespace CitySimulator {
 
             internal void AddSurface(Vertex v0, Vertex v0To1, Vertex v0To2)
             {
-                v0.Normal = Vector3.Cross(v0To1.Pos, v0To2.Pos);
+                v0.Normal = Vector3.Cross(v0To1.Pos, v0To2.Pos).Normalized();
                 v0To1.Normal = Vector3.Zero;
                 v0To2.Normal = Vector3.Zero;
                 var v = new[] {v0, v0 + v0To1, v0 + v0To1 + v0To2, v0 + v0To2};

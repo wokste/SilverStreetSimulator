@@ -9,24 +9,33 @@ namespace CitySimulator {
     class TkCityRenderer {
         private readonly CityMap _cityMap;
 
-        private Light _sun = new Light(LightName.Light0);
-        private Material _material = new Material();
+        private readonly Sun _sun = new Sun(LightName.Light0);
+        private readonly Material _material = new Material();
 
-        private readonly Texture _tileSetSprite;
-        private readonly Texture _buildingSprite;
-        private Mesh _heightMapMesh;
+        private readonly Mesh _heightMapMesh;
+        private readonly Mesh _waterMesh;
+
         private double _time = 0;
 
         public TkCityRenderer(CityMap cityMap) {
             _cityMap = cityMap;
 
-            _tileSetSprite = new Texture("grass.png");
-            _buildingSprite = new Texture("buildings1x1.png");
-
             _heightMapMesh = _cityMap.HeightMap.ToMesh();
+            _heightMapMesh.Texture = new Texture("grass.png");
+
+            var waterMeshFactory = new Mesh.Factory();
+            waterMeshFactory.AddSurface(
+                new Mesh.Vertex{Pos = Vector3.Zero, Normal = Vector3.UnitY, TexCoords = Vector2.Zero},
+                new Mesh.Vertex { Pos = new Vector3(0, 0, 128), TexCoords = new Vector2(0, 32) },
+                new Mesh.Vertex { Pos = new Vector3(128,0,0), TexCoords = new Vector2(32,0) });
+
+            _waterMesh = waterMeshFactory.ToMesh();
+            _waterMesh.Texture = new Texture("water.png");
+
         }
 
         public void Draw() {
+            _sun.AddTime(1f);
             _sun.Update();
             _material.Update();
 
@@ -37,40 +46,25 @@ namespace CitySimulator {
         private void DrawTerrain()
         {
             _time++;
-            _tileSetSprite.Bind();
 
             _heightMapMesh.Render();
 
             // Water
 
-            GL.Disable(EnableCap.Texture2D);
-            GL.Color4((byte)128, (byte)192, (byte)255, (byte)128);
-
-            var waterLevel = -2f + (float)Math.Sin(_time / 200.0) * 0.1;
-
-            GL.Begin(PrimitiveType.Quads);
-            GL.Vertex3(0, waterLevel, 0);
-            GL.Vertex3(0, waterLevel, 128);
-            GL.Vertex3(128, waterLevel, 128);
-            GL.Vertex3(128, waterLevel, 0);
-            GL.End();
-
-            GL.Color4((byte)255, (byte)255, (byte)255, (byte)255);
-            GL.Enable(EnableCap.Texture2D);
+            GL.PushMatrix();
+            var waterLevel = -2 + Math.Sin(_time / 200.0) * 0.1;
+            GL.Translate(0,waterLevel,0);
+            _waterMesh.Render();
+            GL.PopMatrix();
         }
 
         private void DrawBuildings() {
-            
-            GL.Disable(EnableCap.Texture2D);
-
             for (var x = 0; x < _cityMap.SizeX; x++) {
                 for (var y = 0; y < _cityMap.SizeY; y++) {
                     var building = _cityMap.Terrain[x, y].Building;
 
                     if (building == null)
                         continue;
-
-                    GL.Color3((byte)((x * 33 + y * 127) % 128 + 127), (byte)((x * 49 + y * 33) % 128 + 127), (byte)((x * 17 + y * 42) % 128 + 127));
 
                     //TODO: Find correct heightmap values
                     var height = new [] { _cityMap.HeightMap.Height[x, y], _cityMap.HeightMap.Height[x, y+1], _cityMap.HeightMap.Height[x+1, y], _cityMap.HeightMap.Height[x+1, y+1] }.Min();
@@ -86,9 +80,6 @@ namespace CitySimulator {
                     GL.PopMatrix();
                 }
             }
-
-            GL.Color3((byte)255, (byte)255, (byte)255);
-            GL.Enable(EnableCap.Texture2D);
         }
     }
 }

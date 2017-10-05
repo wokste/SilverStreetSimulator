@@ -34,7 +34,7 @@ namespace CitySimulator {
         protected override void OnLoad(EventArgs e) {
             base.OnLoad(e);
             
-            GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
+            GL.ClearColor(0f, 0f, 0f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.Enable(EnableCap.Texture2D);
