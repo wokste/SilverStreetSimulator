@@ -60,8 +60,6 @@ namespace CitySimulator
             if (_time > 1.7)
                 _time = -1.7f;
 
-            _time = 0;
-
             SetPosition();
             SetColour();
         }
