@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace CitySimulator {
+namespace CitySimulator.Render
+{
     class Texture
     {
         internal readonly int TexId;
@@ -26,9 +25,6 @@ namespace CitySimulator {
             image.UnlockBits(bitmapData);
 
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Nearest);
-            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Nearest);
         }
 
         public void Bind()

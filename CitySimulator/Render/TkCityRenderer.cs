@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using System.Collections.Generic;
 using System.Linq;
 
-namespace CitySimulator {
+namespace CitySimulator.Render
+{
     class TkCityRenderer {
         private readonly CityMap _cityMap;
 
@@ -15,7 +14,7 @@ namespace CitySimulator {
         private readonly Mesh _heightMapMesh;
         private readonly Mesh _waterMesh;
 
-        private double _time = 0;
+        private double _time;
 
         public TkCityRenderer(CityMap cityMap) {
             _cityMap = cityMap;

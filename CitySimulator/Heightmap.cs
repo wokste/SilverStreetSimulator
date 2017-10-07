@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CitySimulator.Render;
 using OpenTK;
 
 namespace CitySimulator {
@@ -10,7 +6,7 @@ namespace CitySimulator {
     {
         internal float[,] Height;
 
-        private const float _texScale = 0.1f;
+        private const float TexScale = 0.1f;
 
         internal HeightMap(int sizeX, int sizeY)
         {
@@ -26,7 +22,7 @@ namespace CitySimulator {
                 {
                     factory.Vertices.Add(new Mesh.Vertex {
                         Pos = new Vector3(x, Height[x, y], y),
-                        TexCoords = new Vector2(x * _texScale, y * _texScale),
+                        TexCoords = new Vector2(x * TexScale, y * TexScale),
                         Normal = GetNormal(x,y)
                     });
                 }
@@ -61,7 +57,7 @@ namespace CitySimulator {
 
         private Vector3 GetNormal(int x, int y)
         {
-            Vector3 delta = new Vector3(0,2,0);
+            var delta = new Vector3(0,2,0);
 
             if (x == 0)
                 delta.X = 2 * (Height[x + 1, y] - Height[x, y]);

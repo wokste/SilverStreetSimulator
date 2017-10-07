@@ -30,7 +30,7 @@ namespace CitySimulator {
                 return false;
             }
             
-            var tile = Terrain[(int)pos.X, (int)pos.Y];
+            var tile = Terrain[pos.X, pos.Y];
             if (tile.Terrain == 0) {
                 return false;
             }
@@ -49,7 +49,7 @@ namespace CitySimulator {
                 Pos  = new Vector2(position.X, position.Y)
             };
 
-            Terrain[(int)position.X, (int)position.Y].Building = building;
+            Terrain[position.X, position.Y].Building = building;
             return true;
         }
         

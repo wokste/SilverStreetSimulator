@@ -6,7 +6,7 @@ using OpenTK.Input;
 using CitySimulator.Tools;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
+using CitySimulator.Render;
 
 namespace CitySimulator {
     class TkGameWindow : GameWindow {

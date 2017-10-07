@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Remoting.Messaging;
+﻿using CitySimulator.Render;
 
 namespace CitySimulator {
     static class Program {

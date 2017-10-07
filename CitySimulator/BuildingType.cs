@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using CitySimulator.BuildingGeneration;
+﻿using CitySimulator.BuildingGeneration;
+using CitySimulator.Render;
 using OpenTK;
 
 namespace CitySimulator {

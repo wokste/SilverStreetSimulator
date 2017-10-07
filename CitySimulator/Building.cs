@@ -6,6 +6,6 @@ namespace CitySimulator {
 
         internal Vector2 Pos;
 
-        internal Mesh Mesh;
+        internal Render.Mesh Mesh;
     }
 }

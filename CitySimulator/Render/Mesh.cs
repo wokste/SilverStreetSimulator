@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace CitySimulator {
+namespace CitySimulator.Render
+{
     class Mesh : IDisposable {
         private readonly uint _indexBufferId;
         private readonly uint _vertexBufferId;

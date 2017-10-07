@@ -1,10 +1,9 @@
 ﻿using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using SFML.Graphics;
 using PrimitiveType = OpenTK.Graphics.OpenGL.PrimitiveType;
 
-namespace CitySimulator
+namespace CitySimulator.Render
 {
     class Light
     {
@@ -44,9 +43,9 @@ namespace CitySimulator
         /// <summary>
         /// The time it takes the sun/moon to make a full 1-day cycle.
         /// </summary>
-        private float _cycleTime = 900f;
+        private readonly float _cycleTime = 900f;
 
-        private float _time = 0;
+        private float _time;
 
         public Sun(LightName id) : base(id)
         {
@@ -85,7 +84,7 @@ namespace CitySimulator
             var c02 = new Vector3(0.8f, 0.5f, 0.3f);
             var c06 = new Vector3(1, 1f, 1f);
             
-            var c = new Vector3();
+            Vector3 c;
 
             if (height <= 0)
                 c = c0;
@@ -106,8 +105,8 @@ namespace CitySimulator
 
     class Material
     {
-        private float[] _specular = { 1.0f, 1.0f, 1.0f, 1.0f };
-        private float[] _shininess = { 50.0f };
+        private readonly float[] _specular = { 1.0f, 1.0f, 1.0f, 1.0f };
+        private readonly float[] _shininess = { 50.0f };
 
         public Material()
         {

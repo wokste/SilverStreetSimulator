@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
-using OpenTK;
 
 namespace CitySimulator {
     class CityGenerator {
