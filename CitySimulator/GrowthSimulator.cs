@@ -17,10 +17,10 @@ namespace CitySimulator
             _actors.Add(new Desire.CityActor(zoneManager[3]));
         }
 
-        internal void Update(long timeMs)
+        internal void Update()
         {
             foreach (var actor in _actors){
-                actor.Update(_map, timeMs);
+                actor.Update(_map);
             }
         }
     }

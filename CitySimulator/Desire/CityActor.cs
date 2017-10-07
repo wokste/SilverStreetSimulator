@@ -16,11 +16,11 @@ namespace CitySimulator.Desire {
             _zone = zone;
         }
 
-        public void Update(CityMap city, long deltaMs) {
+        public void Update(CityMap city) {
             // TODO: Growth factor should depend on extra variables.
-            var growthFactor = 6;
+            var growthFactor = 0.15f;
 
-            var count = Math.Floor(_rnd.NextDouble() + (deltaMs / 1000.0) * growthFactor);
+            var count = Math.Floor(_rnd.NextDouble() + growthFactor);
 
             PlaceBuildings(city, (int)count);
 

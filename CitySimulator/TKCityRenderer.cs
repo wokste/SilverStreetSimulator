@@ -34,8 +34,14 @@ namespace CitySimulator {
 
         }
 
+        public void Update()
+        {
+            _time++;
+            _sun.AddTime();
+        }
+
         public void Draw() {
-            _sun.AddTime(0.5f);
+            
             _sun.Update();
             _material.Update();
 
@@ -46,12 +52,10 @@ namespace CitySimulator {
 
         private void DrawTerrain()
         {
-
             _heightMapMesh.Render();
         }
 
         private void DrawWater() {
-            _time++;
             var waterLevel = -2 + Math.Sin(_time / 200.0) * 0.5;
 
             GL.PushMatrix();

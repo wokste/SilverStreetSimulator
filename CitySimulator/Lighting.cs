@@ -44,7 +44,7 @@ namespace CitySimulator
         /// <summary>
         /// The time it takes the sun/moon to make a full 1-day cycle.
         /// </summary>
-        private float _cycleTime = 30f;
+        private float _cycleTime = 900f;
 
         private float _time = 0;
 
@@ -52,9 +52,9 @@ namespace CitySimulator
         {
         }
 
-        public void AddTime(float delta = 0)
+        public void AddTime()
         {
-            _time += delta / _cycleTime / (float) Math.PI / 2;
+            _time += 1.0f / _cycleTime / (float) Math.PI / 2;
 
             // Quick fix for skipping nights. Should be removed when the night sky looks interesting as well.
             if (_time > 1.7)

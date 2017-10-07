@@ -18,11 +18,11 @@ namespace CitySimulator {
             GrowthSimulator = new GrowthSimulator(City, ZoneManager);
         }
 
-        public void Update(long timeMs) {
-            GrowthSimulator.Update(timeMs);
+        public void Update() {
+            GrowthSimulator.Update();
 
             Income = CalculateIncome();
-            Money += Income * timeMs / 1000;
+            Money += Income;
         }
 
         private double CalculateIncome() {

@@ -113,7 +113,9 @@ namespace CitySimulator {
         protected override void OnUpdateFrame(FrameEventArgs e) {
             base.OnUpdateFrame(e);
 
-            _game.Update(1000 / 30);
+            _game.Update();
+
+            _renderer.Update();
             //Title = $"Silver Street Simulator - {_game.Money:C} +- {_game.Income:C}";
         }
 

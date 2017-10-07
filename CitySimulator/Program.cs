@@ -5,7 +5,12 @@ namespace CitySimulator {
     static class Program {
         public static string AssetsFolder = "D:\\projects\\CitySimulatorData\\Assets\\";
         public static string SavesFolder = "D:\\projects\\CitySimulatorData\\Saves\\";
-        
+
+        /// <summary>
+        /// Updates per second
+        /// </summary>
+        public static float Ups = 30;
+
         public static Cache<string, Texture> TextureCache = new Cache<string, Texture>(s => new Texture(s));
 
         /// <summary>
@@ -16,7 +21,7 @@ namespace CitySimulator {
             //frm.GameLoop();
 
             using (var game = new TkGameWindow()) {
-                game.Run(30.0);
+                game.Run(Ups);
             }
         }
     }
