@@ -65,7 +65,7 @@ namespace CitySimulator.Render
 
         private void SetPosition() {
             var v1 = new Vector3(1,0,0);
-            var v2 = new Vector3(0, 0.7071f, 0.7071f);
+            var v2 = new Vector3(0, 0.86602540378f, 0.5f);
 
             var pos = v1 * (float) Math.Sin(_time) + v2 * (float) Math.Cos(_time);
 
