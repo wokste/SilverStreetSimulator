@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using CitySimulator.MeshGeneration;
 
 namespace CitySimulator {
     class CityGenerator {
@@ -34,7 +35,6 @@ namespace CitySimulator {
                     cityMap.HeightMap.Height[x, y] = heightMap.Get(x - 0.5f, y - 0.5f) * 8.0f;
                 }
             }
-
 
             for (var x = 0; x < cityMap.SizeX; x++)
             {

@@ -2,6 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Linq;
+using CitySimulator.MeshGeneration;
 
 namespace CitySimulator.Render
 {
@@ -13,6 +14,8 @@ namespace CitySimulator.Render
 
         private readonly Mesh _heightMapMesh;
         private readonly Mesh _waterMesh;
+
+        private BuildingGenerator _buildingGen = new BuildingGenerator();
 
         private double _time;
 
@@ -76,13 +79,12 @@ namespace CitySimulator.Render
 
                     var pos = new Vector3(x + 0.5f, height, y + 0.5f);
 
-                    GL.PushMatrix();
-
-                    GL.Translate(pos);
-
+                    if (building.Mesh == null)
+                    {
+                        building.Mesh = _buildingGen.GenerateMesh(building, _cityMap);
+                    }
+                    
                     building.Mesh.Render();
-
-                    GL.PopMatrix();
                 }
             }
         }

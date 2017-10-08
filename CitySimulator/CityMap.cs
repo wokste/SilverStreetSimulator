@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using CitySimulator.MeshGeneration;
 using OpenTK;
 
 namespace CitySimulator {
@@ -43,10 +45,12 @@ namespace CitySimulator {
                 //return false;
             }
 
+            var pos = new Vector2(position.X, position.Y);
+
             var building = new Building {
                 Type = type,
-                Mesh = type.GenerateMesh(),
-                Pos  = new Vector2(position.X, position.Y)
+                Mesh = null,
+                Pos  = pos
             };
 
             Terrain[position.X, position.Y].Building = building;

@@ -87,10 +87,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building.cs" />
-    <Compile Include="BuildingGeneration\FloorPlanGenerator.cs" />
-    <Compile Include="BuildingGeneration\FloorPlan.cs" />
-    <Compile Include="BuildingGeneration\RoofGenerator.cs" />
-    <Compile Include="BuildingGeneration\WallGenerator.cs" />
+    <Compile Include="MeshGeneration\BuildingGenerator.cs" />
+    <Compile Include="MeshGeneration\BuildingPlanGenerator.cs" />
+    <Compile Include="MeshGeneration\BuildingPlan.cs" />
+    <Compile Include="MeshGeneration\RoofGenerator.cs" />
+    <Compile Include="MeshGeneration\WallGenerator.cs" />
     <Compile Include="BuildingType.cs" />
     <Compile Include="Cache.cs" />
     <Compile Include="Camera.cs" />
